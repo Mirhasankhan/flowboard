@@ -7,7 +7,7 @@ import { useRegisterRequestMutation } from "@/redux/features/auth/authApi";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import logo from "../../../assets/logo.main.png";
+import logo from "../../../assets/logo.jpeg";
 
 const Register = () => {
   const router = useRouter();

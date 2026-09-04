@@ -11,7 +11,7 @@ import { FaFacebookMessenger } from "react-icons/fa6";
 import { AnimatePresence } from "framer-motion";
 import { useAppSelector } from "@/redux/hooks";
 import { useCurrentUser } from "@/redux/features/auth/authSlice";
-import logo from "../../../assets/logo.main.png";
+import logo from "../../../assets/logo.jpeg";
 import { useProfileQuery } from "@/redux/features/auth/authApi";
 
 const Header = () => {

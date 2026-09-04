@@ -2,7 +2,7 @@
 
 import { useForm, SubmitHandler } from "react-hook-form";
 // import { FaGithub } from "react-icons/fa6";
-import logo from "../../../assets/logo.main.png";
+import logo from "../../../assets/logo.jpeg";
 import Image from "next/image";
 import { TLoginValues } from "@/types/common";
 import { Checkbox } from "@/components/ui/checkbox";
