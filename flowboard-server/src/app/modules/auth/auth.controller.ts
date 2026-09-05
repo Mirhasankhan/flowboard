@@ -4,19 +4,24 @@ import { authService } from "./auth.service";
 import sendResponse from "../../../shared/sendResponse";
 
 const loginUser = catchAsync(async (req, res) => {
-  const result = await authService.loginUserIntoDB(req.body);
-
-  res.cookie("accessToken", result.accessToken, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
-    maxAge: 24 * 60 * 60 * 1000,
-  });
+  const result = await authService.loginUserIntoDB(req.body); 
 
   sendResponse(res, {
     statusCode: 200,
     success: true,
     message: "User successfully logged in",
+    data: result,
+  });
+});
+
+const googleLogin = catchAsync(async (req, res) => {
+  const result = await authService.googleLoginIntoDB(req.body.idToken); 
+
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "Logged in successfully with Google",
+    data: result,
   });
 });
 
@@ -57,24 +62,12 @@ const resetPassword = catchAsync(async (req, res) => {
   });
 });
 
-const logout = catchAsync(async (req, res) => {
-  res.clearCookie("accessToken", {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
-  });
 
-  sendResponse(res, {
-    statusCode: 200,
-    success: true,
-    message: "Logged out successfully",
-  });
-});
 
 export const authController = {
   loginUser,
+  googleLogin,
   sendForgotPasswordOtp,
   verifyForgotPasswordOtpCode,
-  resetPassword,
-  logout,
+  resetPassword
 };

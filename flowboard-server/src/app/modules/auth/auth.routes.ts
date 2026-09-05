@@ -14,6 +14,12 @@ router.post(
   authController.loginUser,
 );
 router.post(
+  "/google-login",
+  rateLimiter(1, 3),
+  validateRequest(authValidation.googleLoginSchema),
+  authController.googleLogin,
+);
+router.post(
   "/send-otp",
   rateLimiter(1, 2),
   validateRequest(authValidation.sendOtpSchema),
@@ -30,6 +36,5 @@ router.patch(
   validateRequest(authValidation.resetPasswordSchema),
   authController.resetPassword,
 );
-router.post("/logout", auth(), authController.logout);
 
 export const authRoute = router;

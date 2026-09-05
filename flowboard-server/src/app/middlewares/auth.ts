@@ -5,6 +5,7 @@ import httpStatus from "http-status";
 import config from "../../config";
 import ApiError from "../../errors/ApiErrors";
 import { jwtHelpers } from "../../helpers/jwtHelpers";
+import prisma from "../../shared/prisma";
 
 const auth = (...roles: string[]) => {
   return async (
@@ -13,7 +14,6 @@ const auth = (...roles: string[]) => {
     next: NextFunction,
   ) => {
     try { 
-
       let token = req.cookies?.accessToken;
 
       if (!token) {
@@ -42,6 +42,19 @@ const auth = (...roles: string[]) => {
         throw new ApiError(
           httpStatus.FORBIDDEN,
           "Forbidden! You are not authorized!",
+        );
+      }
+
+      const user = await prisma.user.findUnique({
+        where: {
+          id: verifiedUser.id,
+        },
+      })
+
+      if (!user) {
+        throw new ApiError(
+          httpStatus.UNAUTHORIZED,
+          "You are not authorized! User not found.",
         );
       }
 

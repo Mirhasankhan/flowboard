@@ -1,11 +1,12 @@
 import { NextFunction, Request, Response } from "express";
-import { AnyZodObject, ZodError } from "zod";
+import { ZodError, ZodType } from "zod";
 
 const validateRequest =
-  (schema: AnyZodObject) =>
+  (schema: ZodType) =>
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       await schema.parseAsync(req.body);
+
       return next();
     } catch (err) {
       if (err instanceof ZodError) {
@@ -18,6 +19,7 @@ const validateRequest =
           })),
         });
       }
+
       return next(err);
     }
   };

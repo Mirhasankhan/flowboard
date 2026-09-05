@@ -5,6 +5,9 @@ import { jwtHelpers } from "../../../helpers/jwtHelpers";
 import config from "../../../config";
 import generateOTP from "../../../helpers/generateOtp";
 import sendEmail from "../../../helpers/sendEmail";
+import { passwordResetEmailBody } from "../../../helpers/emailBody";
+import { SignOptions } from "jsonwebtoken";
+import { verifyGoogleIdToken } from "../../../helpers/googleAuth";
 
 const loginUserIntoDB = async (payload: {
   email: string;
@@ -20,16 +23,10 @@ const loginUserIntoDB = async (payload: {
     throw new ApiError(404, "User not found");
   }
 
-  if (user.status === "Blocked") {
+  if (user.isGoogleLogin) {
     throw new ApiError(
       400,
-      "Your account has been blocked. Please contact support for assistance.",
-    );
-  }
-  if (user.status === "Deleted") {
-    throw new ApiError(
-      400,
-      "Your account has been deleted. Please contact support for assistance.",
+      "Account registered with Google. Use Google login or reset your password.",
     );
   }
 
@@ -43,7 +40,7 @@ const loginUserIntoDB = async (payload: {
   }
 
   const accessToken = jwtHelpers.generateToken(
-    { id: user.id, email: user.email, role: user.role },
+    { id: user.id, email: user.email },
     config.jwt.jwt_secret as string,
     config.jwt.expires_in as any,
   );
@@ -51,128 +48,167 @@ const loginUserIntoDB = async (payload: {
   return {
     id: user.id,
     accessToken,
-    role: user.role,
-    firstName: user.firstName,
-    lastName: user.lastName,
+    email: user.email,
+    fullName: user.fullName,
+  };
+};
+
+const googleLoginIntoDB = async (idToken: string) => {
+  const googleUser = await verifyGoogleIdToken(idToken);
+
+  const googleId = googleUser.sub;
+  const email = googleUser.email;
+  const fullName = googleUser.name ?? email?.split("@")[0] ?? "";
+    const profileImage = googleUser.picture;
+
+  if (!googleId) {
+    throw new ApiError(400, "Google user ID is missing");
+  }
+
+  if (!email) {
+    throw new ApiError(400, "Google email is missing");
+  }
+
+  const user = await prisma.user.findUnique({
+    where: {
+      email: email,
+      googleId: googleId,
+    },
+  });
+
+  if (user) {
+    const accessToken = jwtHelpers.generateToken(
+      { id: user.id, email: user.email },
+      config.jwt.jwt_secret as string,
+      config.jwt.expires_in as SignOptions["expiresIn"],
+    );
+    return {
+      id: user.id,
+      accessToken,
+      fullName: user.fullName,
+      email: user.email,
+    };
+  }
+
+  const newUser = await prisma.user.create({
+    data: {
+      email,
+      fullName,
+      password: "12345Aa#",
+      isGoogleLogin: true,
+      googleId,
+      profileImage,
+    },
+  });
+
+  const accessToken = jwtHelpers.generateToken(
+    { id: newUser.id, email: newUser.email },
+    config.jwt.jwt_secret as string,
+    config.jwt.expires_in as SignOptions["expiresIn"],
+  );
+
+  return {
+    id: newUser.id,
+    accessToken,
+    email: newUser.email,
+    fullName: newUser.fullName,
   };
 };
 
 const sendForgotPasswordOtpDB = async (email: string) => {
-  const existingUser = await prisma.user.findUnique({
+  const existringUser = await prisma.user.findUnique({
     where: {
       email: email,
     },
   });
-  if (!existingUser) {
+
+  if (!existringUser) {
     throw new ApiError(404, "User not found");
   }
-  const otp = generateOTP();
+
+  // Generate OTP and expiry time
+  const otp = generateOTP(); // 4-digit OTP
+  const OTP_EXPIRATION_TIME = 5 * 60 * 1000; // 5 minute
+  const expiresAt = Date.now() + OTP_EXPIRATION_TIME;
+  const subject = "Your Password Reset OTP";
+  const html = passwordResetEmailBody(existringUser.fullName, otp);
+
+  await sendEmail(email, subject, html);
 
   await prisma.otp.upsert({
-    where: { email },
-    update: {
-      otp,
-      expiresAt: new Date(Date.now() + 5 * 60 * 1000),
-      failedAttempts: 0,
-      lockedUntil: null,
+    where: {
+      email: email,
     },
-    create: {
-      email,
-      otp,
-      expiresAt: new Date(Date.now() + 5 * 60 * 1000),
-      failedAttempts: 0,
-    },
+    update: { otp: otp, expiresAt: new Date(expiresAt) },
+    create: { email: email, otp: otp, expiresAt: new Date(expiresAt) },
   });
 
-  const emailSubject = "Your Password Reset OTP";
-  const emailHtml = `<div style="font-family: Arial, sans-serif; color: #333;">
-        <h2>Password Reset Request</h2>
-        <p>Hi <b>${existingUser.firstName} ${existingUser.lastName}</b>,</p>
-        <p>Your OTP for password reset is:</p>
-        <h1 style="color: #007BFF;">${otp}</h1>
-        <p>This OTP is valid for <b>5 minutes</b>. If you did not request this, please ignore this email.</p>
-        <p>Thanks, <br>The Support Team</p>
-      </div>`;
-
-  await sendEmail(email, emailSubject, emailHtml);
-
-  return;
+  return otp;
 };
 
-const verifyForgotPasswordOtpCodeDB = async (payload: {
-  email: string;
-  otp: string;
-}) => {
+// verify otp code
+const verifyForgotPasswordOtpCodeDB = async (payload: any) => {
   const { email, otp } = payload;
 
+  if (!email && !otp) {
+    throw new ApiError(400, "Email and OTP are required.");
+  }
+
   const user = await prisma.user.findUnique({ where: { email: email } });
+
   if (!user) {
     throw new ApiError(404, "User not found");
   }
 
   const userId = user.id;
 
-  const savedOtpRecord = await prisma.otp.findUnique({ where: { email } });
-  if (!savedOtpRecord) {
-    throw new ApiError(400, "OTP not found. Please request a new one.");
+  const verifyData = await prisma.otp.findUnique({
+    where: {
+      email: email,
+    },
+  });
+
+  if (!verifyData) {
+    throw new ApiError(400, "Invalid or expired OTP.");
   }
 
-  if (savedOtpRecord.lockedUntil && new Date() < savedOtpRecord.lockedUntil) {
-    throw new ApiError(
-      429,
-      "Too many failed attempts. Please try again later.",
-    );
-  }
+  const { otp: savedOtp, expiresAt } = verifyData;
 
-  if (new Date() > savedOtpRecord.expiresAt) {
-    await prisma.otp.delete({ where: { email } });
-    throw new ApiError(400, "OTP has expired. Please request a new one.");
-  }
-  if (otp !== savedOtpRecord.otp) {
-    const failedAttempts = savedOtpRecord.failedAttempts + 1;
-
-    if (failedAttempts >= 3) {
-      await prisma.otp.update({
-        where: { email },
-        data: {
-          failedAttempts,
-          lockedUntil: new Date(Date.now() + 1 * 60 * 1000),
-        },
-      });
-
-      throw new ApiError(
-        429,
-        "Too many failed attempts. OTP verification locked for 1 minutes.",
-      );
-    }
-
-    await prisma.otp.update({
-      where: { email },
-      data: {
-        failedAttempts,
-      },
-    });
-
+  if (otp !== savedOtp) {
     throw new ApiError(401, "Invalid OTP.");
   }
 
-  await prisma.otp.delete({ where: { email } });
+  if (Date.now() > expiresAt.getTime()) {
+    await prisma.otp.delete({
+      where: {
+        email: email,
+      },
+    }); // OTP has expired
+    throw new ApiError(410, "OTP has expired. Please request a new OTP.");
+  }
 
-  const forgetToken = jwtHelpers.generateToken(
+  // OTP is valid
+  await prisma.otp.delete({
+    where: {
+      email: email,
+    },
+  });
+
+  const accessToken = jwtHelpers.generateToken(
     { id: userId, email },
     config.jwt.jwt_secret as string,
-    config.jwt.forget_expires_in as any,
+    config.jwt.expires_in as any,
   );
 
-  return { forgetToken };
+  return { accessToken: accessToken };
 };
 
+// reset password
 const resetForgotPasswordDB = async (newPassword: string, userId: string) => {
-  const existingUser = await prisma.user.findUnique({ where: { id: userId } });
-  if (!existingUser) {
-    throw new ApiError(404, "user not found");
-  }
-  const email = existingUser.email as string;
+  const existingUser = await prisma.user.findUniqueOrThrow({
+    where: { id: userId },
+  });
+
   const hashedPassword = await bcrypt.hash(
     newPassword,
     Number(config.jwt.gen_salt),
@@ -180,17 +216,19 @@ const resetForgotPasswordDB = async (newPassword: string, userId: string) => {
 
   await prisma.user.update({
     where: {
-      email: email,
+      id: existingUser.id,
     },
     data: {
       password: hashedPassword,
     },
   });
+
   return;
 };
 
 export const authService = {
   loginUserIntoDB,
+  googleLoginIntoDB,
   sendForgotPasswordOtpDB,
   verifyForgotPasswordOtpCodeDB,
   resetForgotPasswordDB,
