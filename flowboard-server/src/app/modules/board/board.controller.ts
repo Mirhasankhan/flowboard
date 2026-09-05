@@ -14,7 +14,7 @@ const createNewBoard = catchAsync(async (req, res) => {
 });
 
 const userWiseBoards = catchAsync(async (req, res) => {
-  const userId = req.user.id;
+  const userId = req.user.id
   const boards = await boardService.getUserWiseBoardsFromDB(userId);
 
   sendResponse(res, {

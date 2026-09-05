@@ -67,7 +67,7 @@ const CreateBoardModal = () => {
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
         <button className="px-3 flex items-center gap-1 py-3 rounded-[6px] bg-primary text-white font-medium hover:bg-primary/90 transition">
-        <Plus size={17}></Plus>  Create Board
+          <Plus size={17}></Plus>  Create Board
         </button>
       </DialogTrigger>
 
@@ -89,6 +89,7 @@ const CreateBoardModal = () => {
               placeholder="e.g. Q4 Roadmap"
               className="input-design"
               disabled={isLoading}
+              minLength={3}
               {...register("title")}
             />
             {errors.title && (
@@ -106,6 +107,7 @@ const CreateBoardModal = () => {
               placeholder="What's this board about?"
               className="input-design resize-none"
               disabled={isLoading}
+              minLength={6}
               {...register("description")}
             />
             {errors.description && (
@@ -127,11 +129,10 @@ const CreateBoardModal = () => {
             <button
               type="submit"
               disabled={isDisabled}
-              className={`px-4 py-2 rounded-[6px] font-medium text-white transition ${
-                isDisabled
+              className={`px-4 py-2 rounded-[6px] font-medium text-white transition ${isDisabled
                   ? "bg-primary/50 cursor-not-allowed"
                   : "bg-primary hover:bg-primary/90"
-              }`}
+                }`}
             >
               {isLoading ? "Creating..." : "Create board"}
             </button>

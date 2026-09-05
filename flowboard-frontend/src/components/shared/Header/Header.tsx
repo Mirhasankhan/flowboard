@@ -18,6 +18,7 @@ const Header = () => {
   const { data: profileData } = useProfileQuery("", {
     refetchOnMountOrArgChange: true,
   });
+
   const [active, setActive] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const { email, role, name } = useAppSelector(useCurrentUser);
@@ -69,7 +70,7 @@ const Header = () => {
                     width={20}
                     alt=""
                     src={
-                      profileData?.data.profileImage ||
+                      profileData?.result?.profileImage ||
                       "https://res.cloudinary.com/dddrm7ep8/image/upload/v1781532954/y7gdxfkl9uznjt96cjea.png"
                     }
                   ></Image>

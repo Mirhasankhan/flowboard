@@ -4,14 +4,14 @@ const authApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     registerRequest: builder.mutation({
       query: (userInfo) => ({
-        url: "/user/request",
+        url: "/user/create-pending",
         method: "POST",
         body: userInfo,
       }),
     }),
     verifyEmail: builder.mutation({
       query: (data) => ({
-        url: "/user/verify",
+        url: "/user/verify-email",
         method: "POST",
         body: data,
       }),
@@ -40,10 +40,10 @@ const authApi = baseApi.injectEndpoints({
     }),
     profile: builder.query({
       query: () => ({
-        url: "/user/profile",
+        url: "/user/my-profile",
         method: "GET",
       }),
-      providesTags: ["users", "availability"],
+      providesTags: ["users"],
     }),
     sendOtp: builder.mutation({
       query: (email) => ({

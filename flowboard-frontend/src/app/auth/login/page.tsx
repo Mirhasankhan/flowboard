@@ -1,14 +1,11 @@
 "use client";
 
 import { useForm, SubmitHandler } from "react-hook-form";
-// import { FaGithub } from "react-icons/fa6";
 import logo from "../../../assets/logo.jpeg";
 import Image from "next/image";
 import { TLoginValues } from "@/types/common";
 import { Checkbox } from "@/components/ui/checkbox";
 import Link from "next/link";
-// import { FcGoogle } from "react-icons/fc";
-// import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useLoginMutation } from "@/redux/features/auth/authApi";
 import { toast } from "react-toastify";
@@ -30,20 +27,21 @@ const Login = () => {
   const onSubmit: SubmitHandler<TLoginValues> = async (data) => {
     try {
       const response: any = await loginUser(data);
+      console.log(response.data?.result?.accessToken);
 
-      if (response.data?.data?.accessToken) {
+      if (response.data?.result?.accessToken) {
         toast.success("Login Successful");
 
         router.push("/");
         dispatch(
           setUser({
-            name: response.data.data.userInfo.fullName,
-            email: response.data.data.userInfo.email,
-            role: response.data.data.userInfo.role,
-            token: response.data.data.accessToken,
+            name: response.data.result.fullName,
+            email: response.data.result.email,
+            role: response.data.result.role,
+            token: response.data.result?.accessToken,
           })
         );
-        Cookies.set("token", response.data?.data.accessToken);
+        Cookies.set("token", response.data?.result?.accessToken);
       } else if (response.error) {
         toast.error(response.error.data.message);
       }
@@ -109,30 +107,14 @@ const Login = () => {
               <p className="text-red-500 text-sm">{errors.password.message}</p>
             )}
           </div>
-          <div className="flex justify-between items-center py-3">
-            <div className="flex items-center space-x-2">
-              <Checkbox id="terms" />
-              <label
-                htmlFor="terms"
-                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-              >
-                Remember Me
-              </label>
-            </div>
+          <div className="flex justify-between items-center py-3">         
             <Link
               href="/auth/reset-password"
               className="text-secondary hover:underline"
             >
               Forgot Password?
             </Link>
-          </div>
-          {/* <button
-            disabled={isLoading}
-            type="submit"
-            className="bg-primary text-white py-3 w-full font-medium rounded-[4px]"
-          >
-            {isLoading ? "Authenticating..." : "Login"}
-          </button> */}
+          </div>      
           <button
             disabled={isLoading}
             type="submit"
@@ -166,35 +148,7 @@ const Login = () => {
             )}
           </button>
         </form>
-        {/* <div className="flex items-center justify-center my-4">
-          <div className="flex-1 border-t border-gray-300"></div>
-          <span className="px-3 text-gray-500 text-sm">Or, Login with</span>
-          <div className="flex-1 border-t border-gray-300"></div>
-        </div> */}
-        {/* <button
-          onClick={() =>
-            signIn("google", {
-              callbackUrl: "https://glamvibe-frontend.vercel.app/",
-            })
-          }
-          disabled={isLoading}
-          type="submit"
-          className="bg-white flex items-center gap-2 justify-center border py-3 w-full rounded-md"
-        >
-          <FcGoogle size={20} /> Sign In With Google
-        </button>
-        <button
-          onClick={() =>
-            signIn("github", {
-              callbackUrl: "https://glamvibe-frontend.vercel.app/",
-            })
-          }
-          disabled={isLoading}
-          type="submit"
-          className="bg-white flex items-center gap-2 justify-center border py-3 w-full rounded-md mt-3"
-        >
-          <FaGithub size={20} /> Sign In With Github
-        </button> */}
+       
         <div className="text-center text-gray-700 pt-4">
           Dont have an account?
           <Link href="/auth/register" className="text-secondary hover:underline">

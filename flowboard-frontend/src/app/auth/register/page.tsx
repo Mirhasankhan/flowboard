@@ -23,8 +23,7 @@ const Register = () => {
     const registerData = {
       fullName: data.fullName,
       email: data.email,
-      password: data.password,
-      role: "User",
+      password: data.password     
     };
     formData.append("bodyData", JSON.stringify(formData));
     const response: any = await registerRequest(registerData);

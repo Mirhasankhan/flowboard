@@ -9,7 +9,7 @@ export const baseApi = createApi({
     prepareHeaders: (headers) => {
       const { token } = JWTDecode();
 
-      headers.set("Authorization", token as string);
+      headers.set("Authorization", `Bearer ${token as string}`);
 
       // if (token) {
       //   headers.set("Authorization", `${token}`);

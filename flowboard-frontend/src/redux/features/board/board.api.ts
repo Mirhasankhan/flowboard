@@ -3,14 +3,30 @@ import { baseApi } from "../../api/baseApi";
 const boardApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     createNewBoard: builder.mutation({
-      query: (userInfo) => ({
-        url: "/user/request",
+      query: (payload) => ({
+        url: "/board/create",
         method: "POST",
-        body: userInfo,
+        body: payload,
       }),
       invalidatesTags: ["boards"],
     }),
+    userAllBoards: builder.query({
+      query: () => ({
+        url: "/board/user-wise",
+        method: "GET",
+      }),
+      providesTags: ["boards"],
+    }),
+    boardDetails: builder.query({
+      query: (id) => ({
+        url: `/board/details/${id}`,
+        method: "GET",
+      }),
+      providesTags: ["boards"],
+    }),
+
+
   }),
 });
 
-export const { useCreateNewBoardMutation } = boardApi;
+export const { useCreateNewBoardMutation, useUserAllBoardsQuery, useBoardDetailsQuery } = boardApi;

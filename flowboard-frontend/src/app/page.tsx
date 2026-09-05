@@ -1,6 +1,7 @@
 "use client";
 
 import CreateBoardModal from "@/components/board/CreateNewBoardModal";
+import UserAllBoards from "@/components/board/UserAllBoards";
 import Container from "@/utils/Container";
 
 const HomePage = () => {
@@ -14,6 +15,7 @@ const HomePage = () => {
           </div>
           <CreateBoardModal></CreateBoardModal>
         </div>
+        <UserAllBoards></UserAllBoards>
       </Container>
     </main>
   );

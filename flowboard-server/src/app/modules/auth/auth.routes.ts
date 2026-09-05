@@ -9,7 +9,7 @@ const router = express.Router();
 
 router.post(
   "/login",
-  rateLimiter(1, 3),
+  rateLimiter(1, 7),
   validateRequest(authValidation.loginSchema),
   authController.loginUser,
 );
