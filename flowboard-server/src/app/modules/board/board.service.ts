@@ -3,6 +3,7 @@ import prisma from "../../../shared/prisma";
 import ApiError from "../../../errors/ApiErrors";
 import sendEmail from "../../../helpers/sendEmail";
 import { boardInvitationEmailBody } from "../../../helpers/emailBody";
+import { checkBoardEditorAccess } from "../../../helpers/checkEditorAccess";
 
 const createNewBoardIntoDB = async (ownerId: string, payload: Board) => {
   return await prisma.$transaction(async (tx) => {
@@ -115,19 +116,7 @@ const updateBoardByIdInDB = async (
     },
   });
 
-  const member = await prisma.boardMember.findFirst({
-    where: {
-      boardId,
-      userId,
-      role: {
-        in: ["OWNER", "EDITOR"],
-      },
-    },
-  });
-
-  if (!member) {
-    throw new ApiError(403, "You are not authorized to update this board");
-  }
+  await checkBoardEditorAccess(boardId, userId);
 
   await prisma.board.update({
     where: {

@@ -101,6 +101,7 @@ const getMyProfileFromDB = async (userId: string) => {
       id: true,
       email: true,
       fullName: true,
+      profileImage: true,
     },
   });
 

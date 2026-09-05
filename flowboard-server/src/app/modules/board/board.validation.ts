@@ -9,7 +9,7 @@ const boardSchema = z.object({
 
 const boardUpdateSchema = z
   .object({
-    boardId: z.string().uuid("Invalid Board ID"),
+    boardId: z.string().cuid("Invalid Board ID"),
     title: z
       .string()
       .min(3, "Title must be at least 3 characters long")
@@ -29,8 +29,8 @@ const boardUpdateSchema = z
   );
 
 const inviteMemberSchema = z.object({
-  userId: z.string().uuid("Invalid User ID"),
-  boardId: z.string().uuid("Invalid Board ID"),
+  userId: z.string().cuid("Invalid User ID"),
+  boardId: z.string().cuid("Invalid Board ID"),
   role: z.enum(["VIEWER", "EDITOR"]),
 });
 

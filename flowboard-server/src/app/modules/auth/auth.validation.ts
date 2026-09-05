@@ -15,7 +15,7 @@ const sendOtpSchema = z.object({
 
 const verifyOtpSchema = z.object({
   email: z.string().email("Invalid email address"),
-  otp: z.string().length(6, "OTP must be 6 characters long"),
+  otp: z.string().length(4, "OTP must be 4 characters long"),
 });
 
 const resetPasswordSchema = z.object({
