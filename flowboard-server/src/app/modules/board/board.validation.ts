@@ -22,12 +22,20 @@ const boardUpdateSchema = z
   .refine(
     (data) => data.title !== undefined || data.description !== undefined,
     {
-      message: "At least one of title or description must be provided for update",
+      message:
+        "At least one of title or description must be provided for update",
       path: ["title"],
-    }
+    },
   );
+
+const inviteMemberSchema = z.object({
+  userId: z.string().uuid("Invalid User ID"),
+  boardId: z.string().uuid("Invalid Board ID"),
+  role: z.enum(["VIEWER", "EDITOR"]),
+});
 
 export const boardValidation = {
   boardSchema,
   boardUpdateSchema,
+  inviteMemberSchema,
 };

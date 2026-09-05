@@ -88,3 +88,44 @@ export const passwordResetEmailBody = (fullName: string, otp: string) => {
 
   return html;
 };
+
+export const boardInvitationEmailBody = (
+  fullName: string,
+  boardTitle: string,
+) => {
+  const html = `
+    <div style="font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 30px;">
+      <div style="max-width: 560px; margin: auto; background: #fff; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); overflow: hidden;">
+        <div style="background-color: #27c074; padding: 24px; text-align: center;">
+          <img
+            src="https://nyc3.digitaloceanspaces.com/smtech-space/uploads/messages/files/1762406748731-7yj8hrmorob.png"
+            alt="Flowboard logo"
+            style="height: 64px; margin-bottom: 12px;"
+          />
+          <h2 style="color: #fff; margin: 0; font-size: 24px;">You're invited to Flowboard</h2>
+        </div>
+
+        <div style="padding: 32px; color: #333;">
+          <p style="font-size: 16px; margin: 0 0 18px;">Hi <b>${fullName}</b>,</p>
+          <p style="font-size: 16px; line-height: 1.6; margin: 0 0 22px;">
+            You have been invited to join the board below and collaborate with your team.
+          </p>
+
+          <div style="background-color: #f0fbf5; border-left: 4px solid #27c074; padding: 18px 20px; margin: 0 0 24px;">
+            <h3 style="color: #16834b; margin: 0; font-size: 20px;">${boardTitle}</h3>
+          </div>
+
+          <p style="font-size: 14px; line-height: 1.6; color: #777; margin: 0;">
+            Sign in to Flowboard to view the board and start collaborating.
+          </p>
+        </div>
+
+        <div style="background-color: #f9f9f9; padding: 15px; text-align: center; font-size: 12px; color: #aaa;">
+          &copy; ${new Date().getFullYear()} Flowboard. All rights reserved.
+        </div>
+      </div>
+    </div>
+  `;
+
+  return html;
+};

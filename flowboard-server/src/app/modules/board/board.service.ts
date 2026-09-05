@@ -1,6 +1,8 @@
-import { Board } from "@prisma/client";
+import { Board, Role } from "@prisma/client";
 import prisma from "../../../shared/prisma";
 import ApiError from "../../../errors/ApiErrors";
+import sendEmail from "../../../helpers/sendEmail";
+import { boardInvitationEmailBody } from "../../../helpers/emailBody";
 
 const createNewBoardIntoDB = async (ownerId: string, payload: Board) => {
   return await prisma.$transaction(async (tx) => {
@@ -170,7 +172,80 @@ const deleteBoardByIdInDB = async (userId: string, boardId: string) => {
   return;
 };
 
- 
+const getUnInvitedMembersByBoardIdFromDB = async (boardId: string) => {
+  await prisma.board.findUniqueOrThrow({
+    where: {
+      id: boardId,
+    },
+  });
+
+  const unInvitedMembers = await prisma.user.findMany({
+    where: {
+      boardMembers: {
+        none: {
+          boardId,
+        },
+      },
+    },
+    select: {
+      id: true,
+      fullName: true,
+      email: true,
+      profileImage: true,
+    },
+  });
+
+  return unInvitedMembers;
+};
+
+const inviteMemberToBoardInDB = async (payload: {
+  boardId: string;
+  userId: string;
+  role: Role;
+}) => {
+  const board = await prisma.board.findUniqueOrThrow({
+    where: {
+      id: payload.boardId,
+    },
+    select: {
+      id: true,
+      title: true,
+      members: true,
+    },
+  });
+
+  const user = await prisma.user.findUniqueOrThrow({
+    where: {
+      id: payload.userId,
+    },
+    select: {
+      email: true,
+      fullName: true,
+    },
+  });
+
+  if (board.members.some((member) => member.userId === payload.userId)) {
+    throw new ApiError(409, "User is already a member of this board");
+  }
+
+  const html = boardInvitationEmailBody(user.fullName, board.title);
+
+  await sendEmail(
+    user.email,
+    "You have been invited to a Flowboard board",
+    html,
+  );
+
+  await prisma.boardMember.create({
+    data: {
+      boardId: payload.boardId,
+      userId: payload.userId,
+      role: payload.role,
+    },
+  });
+
+  return;
+};
 
 export const boardService = {
   createNewBoardIntoDB,
@@ -178,4 +253,6 @@ export const boardService = {
   getBoardByIdFromDB,
   updateBoardByIdInDB,
   deleteBoardByIdInDB,
+  getUnInvitedMembersByBoardIdFromDB,
+  inviteMemberToBoardInDB,
 };
