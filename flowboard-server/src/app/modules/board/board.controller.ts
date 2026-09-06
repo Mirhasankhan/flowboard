@@ -26,8 +26,9 @@ const userWiseBoards = catchAsync(async (req, res) => {
 });
 
 const getBoardById = catchAsync(async (req, res) => {
+  const userId = req.user.id;
   const boardId = req.params.id;
-  const board = await boardService.getBoardByIdFromDB(boardId);
+  const board = await boardService.getBoardByIdFromDB(userId, boardId);
 
   sendResponse(res, {
     success: true,
@@ -78,13 +79,26 @@ const getUnInvitedMembersByBoardId = catchAsync(async (req, res) => {
 });
 
 const inviteMemberToBoard = catchAsync(async (req, res) => {
+  const userId = req.user.id
   const paylod = req.body;
-  await boardService.inviteMemberToBoardInDB(paylod);
+  await boardService.inviteMemberToBoardInDB(userId, paylod);
 
   sendResponse(res, {
     success: true,
     statusCode: 201,
     message: "Member invited to board successfully.",
+  });
+});
+
+const removeMemberFromBoard = catchAsync(async (req, res) => {
+  const userId = req.user.id
+  const memberId = req.params.id;
+  await boardService.removeMemberFromBoardInDB(userId, memberId);
+
+  sendResponse(res, {
+    success: true,
+    statusCode: 200,
+    message: "Member removed from board successfully.",
   });
 });
 
@@ -96,4 +110,5 @@ export const boardController = {
   updateBoard,
   deleteBoard,
   inviteMemberToBoard,
+  removeMemberFromBoard,
 };

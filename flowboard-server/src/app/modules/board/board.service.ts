@@ -63,7 +63,20 @@ const getUserWiseBoardsFromDB = async (userId: string) => {
   return boards;
 };
 
-const getBoardByIdFromDB = async (boardId: string) => {
+const getBoardByIdFromDB = async (userId: string, boardId: string) => {
+  const userRole = await prisma.boardMember.findFirst({
+    where: {
+      boardId,
+      userId,
+    },
+    select: {
+      role: true,
+    },
+  });
+
+  if (!userRole) {
+    throw new ApiError(404, "You are not a member of this board");
+  }
   const board = await prisma.board.findUniqueOrThrow({
     where: {
       id: boardId,
@@ -102,7 +115,10 @@ const getBoardByIdFromDB = async (boardId: string) => {
     },
   });
 
-  return board;
+  return {
+    board,
+    role: userRole.role,
+  };
 };
 
 const updateBoardByIdInDB = async (
@@ -187,9 +203,9 @@ const getUnInvitedMembersByBoardIdFromDB = async (boardId: string) => {
   return unInvitedMembers;
 };
 
-const inviteMemberToBoardInDB = async (payload: {
+const inviteMemberToBoardInDB = async (userId:string,payload: {
   boardId: string;
-  userId: string;
+  memberId: string;
   role: Role;
 }) => {
   const board = await prisma.board.findUniqueOrThrow({
@@ -205,7 +221,7 @@ const inviteMemberToBoardInDB = async (payload: {
 
   const user = await prisma.user.findUniqueOrThrow({
     where: {
-      id: payload.userId,
+      id: payload.memberId,
     },
     select: {
       email: true,
@@ -213,11 +229,13 @@ const inviteMemberToBoardInDB = async (payload: {
     },
   });
 
-  if (board.members.some((member) => member.userId === payload.userId)) {
+  await checkBoardEditorAccess(payload.boardId, userId)
+
+  if (board.members.some((member) => member.userId === payload.memberId)) {
     throw new ApiError(409, "User is already a member of this board");
   }
 
-  const html = boardInvitationEmailBody(user.fullName, board.title);
+  const html = boardInvitationEmailBody(user.fullName, board.title, payload.role);
 
   await sendEmail(
     user.email,
@@ -228,13 +246,39 @@ const inviteMemberToBoardInDB = async (payload: {
   await prisma.boardMember.create({
     data: {
       boardId: payload.boardId,
-      userId: payload.userId,
+      userId: payload.memberId,
       role: payload.role,
     },
   });
 
   return;
 };
+
+const removeMemberFromBoardInDB = async (userId: string, memberId: string) => {
+  const member = await prisma.boardMember.findUniqueOrThrow({
+    where: {
+      id: memberId,
+
+    },
+    include: {
+      board: {
+        select: {
+          id: true
+        }
+      }
+    }
+  });
+
+  await checkBoardEditorAccess(member.board.id, userId)
+
+  await prisma.boardMember.delete({
+    where: {
+      id: memberId
+    }
+  })
+
+  return;
+}
 
 export const boardService = {
   createNewBoardIntoDB,
@@ -244,4 +288,5 @@ export const boardService = {
   deleteBoardByIdInDB,
   getUnInvitedMembersByBoardIdFromDB,
   inviteMemberToBoardInDB,
+  removeMemberFromBoardInDB
 };

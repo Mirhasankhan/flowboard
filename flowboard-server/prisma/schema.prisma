@@ -93,7 +93,6 @@ model Column {
 model Task {
   id          String   @id @default(cuid())
   title       String
-  description String?
   position    Float
   columnId    String
   createdAt   DateTime @default(now())

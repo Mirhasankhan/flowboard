@@ -33,4 +33,6 @@ router.post(
   boardController.inviteMemberToBoard,
 );
 
+router.delete("/remove-member/:id", auth(), boardController.removeMemberFromBoard);
+
 export const boardRoutes = router;

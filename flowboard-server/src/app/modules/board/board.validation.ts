@@ -29,7 +29,7 @@ const boardUpdateSchema = z
   );
 
 const inviteMemberSchema = z.object({
-  userId: z.string().cuid("Invalid User ID"),
+  memberId: z.string().cuid("Invalid User ID"),
   boardId: z.string().cuid("Invalid Board ID"),
   role: z.enum(["VIEWER", "EDITOR"]),
 });

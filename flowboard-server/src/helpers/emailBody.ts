@@ -92,6 +92,7 @@ export const passwordResetEmailBody = (fullName: string, otp: string) => {
 export const boardInvitationEmailBody = (
   fullName: string,
   boardTitle: string,
+  role: string
 ) => {
   const html = `
     <div style="font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 30px;">
@@ -108,11 +109,14 @@ export const boardInvitationEmailBody = (
         <div style="padding: 32px; color: #333;">
           <p style="font-size: 16px; margin: 0 0 18px;">Hi <b>${fullName}</b>,</p>
           <p style="font-size: 16px; line-height: 1.6; margin: 0 0 22px;">
-            You have been invited to join the board below and collaborate with your team.
+            You have been invited to join the board below as <b>${role}</b> and collaborate with your team.
           </p>
 
-          <div style="background-color: #f0fbf5; border-left: 4px solid #27c074; padding: 18px 20px; margin: 0 0 24px;">
-            <h3 style="color: #16834b; margin: 0; font-size: 20px;">${boardTitle}</h3>
+          <div style="background-color: #f0fbf5; border-left: 4px solid #27c074; padding: 18px 20px; margin: 0 0 24px; border-radius: 4px;">
+            <h3 style="color: #16834b; margin: 0 0 8px; font-size: 20px;">${boardTitle}</h3>
+            <p style="margin: 0; font-size: 14px; color: #555;">
+              Role: <span style="font-weight: 600; color: #16834b; text-transform: uppercase;">${role}</span>
+            </p>
           </div>
 
           <p style="font-size: 14px; line-height: 1.6; color: #777; margin: 0;">

@@ -24,9 +24,47 @@ const boardApi = baseApi.injectEndpoints({
       }),
       providesTags: ["boards"],
     }),
+      updateBoard: builder.mutation({
+      query: (payload) => ({
+        url: "/board/update",
+        method: "PUT",
+        body: payload,
+      }),
+      invalidatesTags: ["boards"],
+    }),
+    uninvitedMembers: builder.query({
+      query: (id) => ({
+        url: `/board/uninvited-members/${id}`,
+        method: "GET",
+      }),
+      providesTags: ["boards"],
+    }),
 
+    inviteMember: builder.mutation({
+      query: (payload) => ({
+        url: "/board/invite-member",
+        method: "POST",
+        body: payload,
+      }),
+      invalidatesTags: ["boards"],
+    }),
 
+    removeMember: builder.mutation({
+      query: (id) => ({
+        url: `/board/remove-member/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["boards"],
+    }),
   }),
 });
 
-export const { useCreateNewBoardMutation, useUserAllBoardsQuery, useBoardDetailsQuery } = boardApi;
+export const {
+  useCreateNewBoardMutation,
+  useUserAllBoardsQuery,
+  useUpdateBoardMutation,
+  useBoardDetailsQuery,
+  useUninvitedMembersQuery,
+  useInviteMemberMutation,
+  useRemoveMemberMutation,
+} = boardApi;

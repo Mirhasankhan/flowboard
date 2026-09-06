@@ -37,13 +37,7 @@ const Register = () => {
   };
 
   return (
-    <div className="bg-[#f8f8f8] min-h-screen flex items-center justify-center">
-      {/* <div className="text-center">
-        <h1 className="text-4xl font-medium"> Join Juri Link</h1>
-        <p className="font-medium py-3 text-gray-500">
-          Create your account to get started
-        </p>
-      </div> */}
+    <div className="bg-[#f8f8f8] min-h-screen flex items-center justify-center">   
 
       <div className="w-full md:w-2/5 xl:w-1/3 shadow-md md:mx-auto mx-2 py-12 px-6 dark:text-white bg-white rounded-[16px]">
         <Image

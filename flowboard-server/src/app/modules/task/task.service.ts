@@ -24,55 +24,55 @@ const getBoardIdForTask = async (taskId: string) => {
   return task.column.boardId;
 };
 
-export async function createTask(
-  columnId: string,
+const createTaskInDB = async (
   userId: string,
-  data: { title: string; description?: string },
-) {
-  const boardId = await getBoardIdForColumn(columnId);
+  payload: { columnId: string, title: string }
+
+) => {
+  const boardId = await getBoardIdForColumn(payload.columnId);
   await checkBoardEditorAccess(boardId, userId);
 
   const last = await prisma.task.findFirst({
-    where: { columnId },
+    where: { columnId: payload.columnId },
     orderBy: { position: "desc" },
     select: { position: true },
   });
 
-  return prisma.task.create({
+  await prisma.task.create({
     data: {
-      title: data.title,
-      description: data.description,
-      columnId,
+      title: payload.title,
+      columnId: payload.columnId,
       position: (last?.position ?? 0) + POSITION_GAP,
     },
   });
+
+  return
 }
 
-export async function updateTask(
+const updateTaskInDB = async (
   taskId: string,
   userId: string,
   data: { title?: string; description?: string },
-) {
+) => {
   const boardId = await getBoardIdForTask(taskId);
   await checkBoardEditorAccess(boardId, userId);
 
   return prisma.task.update({ where: { id: taskId }, data });
 }
 
-export async function deleteTask(taskId: string, userId: string) {
+const deleteTaskInDB = async (taskId: string, userId: string) => {
   const boardId = await getBoardIdForTask(taskId);
   await checkBoardEditorAccess(boardId, userId);
 
   await prisma.task.delete({ where: { id: taskId } });
 }
 
-
-export async function moveTask(
+const moveTaskInDB = async (
   taskId: string,
   userId: string,
   targetColumnId: string,
   targetIndex: number,
-) {
+) => {
   const sourceBoardId = await getBoardIdForTask(taskId);
   await checkBoardEditorAccess(sourceBoardId, userId);
 
@@ -106,23 +106,23 @@ export async function moveTask(
         );
       }
 
-      const before = siblings[targetIndex - 1]; 
-      const after = siblings[targetIndex]; 
+      const before = siblings[targetIndex - 1];
+      const after = siblings[targetIndex];
 
       let newPosition: number;
 
-      if (!before && !after) {  
+      if (!before && !after) {
         newPosition = POSITION_GAP;
-      } else if (!before) {      
+      } else if (!before) {
         newPosition = after.position - POSITION_GAP;
-      } else if (!after) {   
+      } else if (!after) {
         newPosition = before.position + POSITION_GAP;
       } else {
-      
+
         newPosition = (before.position + after.position) / 2;
 
         if (after.position - before.position < MIN_GAP) {
-         
+
           newPosition = await renormalizeAndRecompute(
             tx,
             targetColumnId,
@@ -172,8 +172,8 @@ async function renormalizeAndRecompute(
 }
 
 export const taskService = {
-  createTask,
-  updateTask,
-  deleteTask,
-  moveTask,
+  createTaskInDB,
+  updateTaskInDB,
+  deleteTaskInDB,
+  moveTaskInDB,
 };
