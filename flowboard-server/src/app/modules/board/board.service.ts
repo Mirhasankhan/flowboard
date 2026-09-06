@@ -286,6 +286,38 @@ const removeMemberFromBoardInDB = async (userId: string, memberId: string) => {
   return;
 }
 
+
+const updateMemberRoleInDB = async(userId:string, memberId:string) =>{
+    const member = await prisma.boardMember.findUniqueOrThrow({
+    where: {
+      id: memberId,
+
+    },
+    include: {
+      board: {
+        select: {
+          id: true
+        }
+      }
+    }
+  });
+
+  await checkBoardEditorAccess(member.board.id, userId)
+
+  await prisma.boardMember.update({
+    where:{
+      id: memberId
+    },
+    data:{
+      role: member.role == "VIEWER" ? "EDITOR" : "VIEWER"
+    }
+  })
+
+  return {
+    message : `Member role has been updated to ${member.role == "VIEWER" ? "EDITOR" : "VIEWER"} successfully.`
+  }
+}
+
 export const boardService = {
   createNewBoardIntoDB,
   getUserWiseBoardsFromDB,
@@ -294,5 +326,6 @@ export const boardService = {
   deleteBoardByIdInDB,
   getUnInvitedMembersByBoardIdFromDB,
   inviteMemberToBoardInDB,
-  removeMemberFromBoardInDB
+  removeMemberFromBoardInDB,
+  updateMemberRoleInDB
 };

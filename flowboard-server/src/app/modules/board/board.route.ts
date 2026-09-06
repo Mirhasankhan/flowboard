@@ -38,5 +38,6 @@ router.post(
 );
 
 router.delete("/remove-member/:id", auth(), boardController.removeMemberFromBoard);
+router.patch("/update-member-role/:id", auth(), boardController.updateMemberRole);
 
 export const boardRoutes = router;

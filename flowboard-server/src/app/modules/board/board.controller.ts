@@ -102,6 +102,18 @@ const removeMemberFromBoard = catchAsync(async (req, res) => {
   });
 });
 
+const updateMemberRole = catchAsync(async (req, res) => {
+  const userId = req.user.id
+  const memberId = req.params.id;
+  const response = await boardService.updateMemberRoleInDB(userId, memberId);
+
+  sendResponse(res, {
+    success: true,
+    statusCode: 200,
+    message: response.message,
+  });
+});
+
 export const boardController = {
   createNewBoard,
   userWiseBoards,
@@ -111,4 +123,5 @@ export const boardController = {
   deleteBoard,
   inviteMemberToBoard,
   removeMemberFromBoard,
+  updateMemberRole
 };

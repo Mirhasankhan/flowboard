@@ -63,6 +63,14 @@ const boardApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["boards"],
     }),
+
+    updateMemberRole: builder.mutation({
+      query: (id) => ({
+        url: `/board/update-member-role/${id}`,
+        method: "PATCH",
+      }),
+      invalidatesTags: ["boards"],
+    }),
   }),
 });
 
@@ -75,4 +83,5 @@ export const {
   useUninvitedMembersQuery,
   useInviteMemberMutation,
   useRemoveMemberMutation,
+  useUpdateMemberRoleMutation,
 } = boardApi;
