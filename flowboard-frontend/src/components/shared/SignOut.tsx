@@ -18,14 +18,14 @@ const SignOut = () => {
     );
     Cookies.remove("token");
 
-    router.push("/");
+    router.push("/auth/login");
   };
   return (
     <button
       onClick={() => logOut()}
-      className=" flex items-center gap-2 text-red-600 py-3 hover:bg-red-100 w-full  font-medium pl-4"
+      className="bg-transparent border text-red-600 border-red-600 px-5 py-2 rounded-[6px]"
     >
-      <LogOut />
+      
       Sign Out
     </button>
   );

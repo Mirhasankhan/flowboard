@@ -24,11 +24,18 @@ const boardApi = baseApi.injectEndpoints({
       }),
       providesTags: ["boards"],
     }),
-      updateBoard: builder.mutation({
+    updateBoard: builder.mutation({
       query: (payload) => ({
         url: "/board/update",
         method: "PUT",
         body: payload,
+      }),
+      invalidatesTags: ["boards"],
+    }),
+    deleteBoard: builder.mutation({
+      query: (id) => ({
+        url: `/board/delete/${id}`,
+        method: "DELETE",
       }),
       invalidatesTags: ["boards"],
     }),
@@ -64,6 +71,7 @@ export const {
   useUserAllBoardsQuery,
   useUpdateBoardMutation,
   useBoardDetailsQuery,
+  useDeleteBoardMutation,
   useUninvitedMembersQuery,
   useInviteMemberMutation,
   useRemoveMemberMutation,

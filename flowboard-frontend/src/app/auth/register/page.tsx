@@ -6,8 +6,6 @@ import Link from "next/link";
 import { useRegisterRequestMutation } from "@/redux/features/auth/authApi";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
-import logo from "../../../assets/logo.jpeg";
 
 const Register = () => {
   const router = useRouter();
@@ -40,16 +38,17 @@ const Register = () => {
     <div className="bg-[#f8f8f8] min-h-screen flex items-center justify-center">
 
       <div className="w-full md:w-2/5 xl:w-1/3 shadow-md md:mx-auto mx-2 py-12 px-6 dark:text-white bg-white rounded-[16px]">
-        <Image
-          placeholder="blur"
-          src={logo}
-          alt=""
-          height={150}
-          width={150}
-        ></Image>
-        <h1 className="text-2xl mt-6 font-medium ">Client Registration</h1>
+        <h1
+          style={{
+            fontFamily: "'Satisfy', cursive",
+          }}        
+          className="flex text-green-600 text-3xl font-bold items-center gap-2"
+        >
+          <span className="tracking-wide">Flowboard</span>
+        </h1>
+
         <h1 className="text-sm text-gray-600">
-          Sign up to find and hire lawyers
+          Sign up to to manage boards
         </h1>
 
         <form
@@ -122,17 +121,7 @@ const Register = () => {
           >
             Login
           </Link>
-        </div>
-
-        <div className="flex text-gray-700 pt-2 justify-center">
-          <h1>Want to register as a lawyer?</h1>
-          <Link
-            href="/auth/register-lawyer"
-            className="text-secondary hover:underline ml-1"
-          >
-            Register as Lawyer
-          </Link>
-        </div>
+        </div>      
       </div>
     </div>
   );

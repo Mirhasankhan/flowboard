@@ -26,7 +26,7 @@ const loginUserIntoDB = async (payload: {
   if (user.isGoogleLogin) {
     throw new ApiError(
       400,
-      "Account registered with Google. Use Google login or reset your password.",
+      "Account registered with Google. Use Google login instead.",
     );
   }
 

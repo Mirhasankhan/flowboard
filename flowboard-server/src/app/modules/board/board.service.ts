@@ -42,11 +42,11 @@ const getUserWiseBoardsFromDB = async (userId: string) => {
           title: true,
           description: true,
           members: {
-            where: {
-              userId: {
-                not: userId,
-              },
-            },
+            // where: {
+            //   userId: {
+            //     not: userId,
+            //   },
+            // },
             select: {
               user: {
                 select: {

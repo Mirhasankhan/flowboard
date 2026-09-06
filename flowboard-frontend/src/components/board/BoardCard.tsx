@@ -95,7 +95,7 @@ export const BoardCard = ({
           )}
         </div>
         <span className="text-xs text-gray-500">
-          {members.length + 1} {members.length === 1 ? "member" : "members"}
+          {members.length} {members.length === 1 ? "member" : "members"}
         </span>
       </div>
     </div>
