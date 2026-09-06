@@ -170,7 +170,7 @@ const BoardColumn = ({
                 onChange={(e) => setTitle(e.target.value)}
                 onKeyDown={handleTitleKeyDown}
                 disabled={isSavingTitle}
-                className="w-full rounded-[6px] border border-blue-500 bg-white px-2 py-1 text-sm font-semibold text-zinc-900 focus:outline-none dark:bg-zinc-950 dark:text-zinc-100"
+                className="w-full rounded-[6px] border border-primary bg-white px-2 py-1 text-sm font-semibold "
               />
               <button
                 type="button"
@@ -280,6 +280,7 @@ const BoardColumn = ({
               <textarea
                 autoFocus
                 value={newTaskTitle}
+                minLength={3}
                 onChange={(e) => setNewTaskTitle(e.target.value)}
                 onKeyDown={(e) => {
                   if (e.key === "Enter" && !e.shiftKey) {
@@ -293,13 +294,13 @@ const BoardColumn = ({
                 disabled={isSubmittingTask}
                 placeholder="Enter a task title..."
                 rows={2}
-                className="w-full resize-none rounded-xl border border-blue-500 bg-white p-2.5 text-sm text-zinc-900 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:bg-zinc-950 dark:text-zinc-100"
+                className="input-design"
               />
               <div className="flex items-center gap-2">
                 <button
                   type="submit"
                   disabled={isSubmittingTask || !newTaskTitle.trim()}
-                  className="inline-flex items-center gap-1.5 rounded-[9px] bg-blue-600 px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-blue-700 disabled:opacity-50"
+                  className="inline-flex items-center gap-1.5 rounded-[9px] bg-primary px-3 py-1.5 text-xs font-semibold text-white transition disabled:opacity-50"
                 >
                   {isSubmittingTask && <Loader2 className="h-3 w-3 animate-spin" />}
                   Add Task
@@ -311,7 +312,7 @@ const BoardColumn = ({
                     setIsAddingTask(false);
                     setNewTaskTitle("");
                   }}
-                  className="rounded-[9px] px-2.5 py-1.5 text-xs font-medium text-zinc-600 hover:bg-zinc-200/60 dark:text-zinc-400 dark:hover:bg-zinc-800"
+                  className="rounded-[9px] px-2.5 py-1.5 text-xs font-medium text-zinc-600 "
                 >
                   Cancel
                 </button>
@@ -321,9 +322,9 @@ const BoardColumn = ({
             <button
               type="button"
               onClick={() => setIsAddingTask(true)}
-              className="flex w-full items-center gap-2 rounded-xl py-2 px-3 text-sm font-medium text-zinc-600 transition hover:bg-zinc-200/60 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-200"
+              className="flex w-full items-center gap-2 rounded-xl py-2 px-3 text-sm font-medium text-zinc-600 transition  bg-primary/10"
             >
-              <Plus className="h-4 w-4" />
+              <Plus className="h-4 w-4 text-primary" />
               Add Task
             </button>
           )}

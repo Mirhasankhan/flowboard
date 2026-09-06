@@ -66,7 +66,7 @@ const Login = () => {
 
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className="rounded-[9px] pt-6 bg-white"
+          className="rounded-[9px] py-6 bg-white"
         >
           <div className="mb-4">
             <label className="label-design pb-1">Email Address</label>

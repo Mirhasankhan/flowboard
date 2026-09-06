@@ -67,7 +67,7 @@ const BoardDetailsEditor = ({
             value={title}
             onChange={(event) => setTitle(event.target.value)}
             aria-label="Board title"
-            className="w-full rounded-[6px] border border-gray-200 px-3 py-2 text-2xl font-bold text-gray-900 outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100"
+            className="input-design "
             autoFocus
           />
           <textarea
@@ -75,13 +75,13 @@ const BoardDetailsEditor = ({
             onChange={(event) => setDescription(event.target.value)}
             aria-label="Board description"
             rows={2}
-            className="w-full resize-none rounded-[6px] border border-gray-200 px-3 py-2 text-sm text-gray-600 outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100"
+            className="input-design"
           />
           <div className="flex items-center gap-2 pt-1">
             <button
               type="submit"
               disabled={isUpdating}
-              className="inline-flex items-center gap-1.5 rounded-[6px] bg-indigo-600 px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-60"
+              className="inline-flex items-center gap-1.5 rounded-[6px] bg-primary px-3 py-1.5 text-xs font-semibold text-white transition disabled:cursor-not-allowed disabled:opacity-60"
             >
               {isUpdating ? (
                 <Loader2 size={14} className="animate-spin" />
@@ -111,7 +111,7 @@ const BoardDetailsEditor = ({
                 onClick={() => setIsEditing(true)}
                 aria-label="Edit board details"
                 title="Edit board details"
-                className="rounded-[6px] p-1.5 text-gray-400 transition hover:bg-indigo-50 hover:text-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-200"
+                className="rounded-[6px] p-1.5 text-gray-400 transition"
               >
                 <Pencil size={16} />
               </button>

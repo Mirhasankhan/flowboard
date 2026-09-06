@@ -7,13 +7,7 @@ import { Mail } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
-// import {
-//   Dialog,
-//   DialogContent,
-//   DialogDescription,
-//   DialogHeader,
-//   DialogTitle,
-// } from "@/components/ui/dialog";
+
 
 const VerifyEmail = () => {
   const [verifyOtp, { isLoading }] = useVerifyEmailMutation();
@@ -23,8 +17,7 @@ const VerifyEmail = () => {
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
   const [otp, setOtp] = useState({ d1: "", d2: "", d3: "", d4: "" });
   const [timeLeft, setTimeLeft] = useState(30);
-  // const [openModal, setOpenModal] = useState(false);
-  // const [stripeLink, setStripeLink] = useState<string | null>(null);
+
 
   useEffect(() => {
     if (timeLeft <= 0) return;
@@ -68,12 +61,7 @@ const VerifyEmail = () => {
       toast.success(response.data.message);
       router.push("/auth/login");
       localStorage.removeItem("verify");
-      // if (response.data.data?.accountLink) {
-      //   setStripeLink(response.data.data.accountLink);
-      //   setOpenModal(true);
-      // } else {
-      //   router.push("/auth/login");
-      // }
+    
     } else {
       toast.error(response.error.data.message);
     }
@@ -87,9 +75,7 @@ const VerifyEmail = () => {
     }
   };
 
-  // if(!email){
-  //   router.push("/")
-  // }
+ 
 
   return (
     <>
@@ -152,38 +138,7 @@ const VerifyEmail = () => {
         </div>
       </div>
 
-      {/* <Dialog open={openModal} onOpenChange={setOpenModal}>
-        <DialogContent className="sm:max-w-[420px] bg-white rounded-[9px] p-6 shadow-lg">
-          <DialogHeader>
-            <DialogTitle className="text-xl font-semibold">
-              Setup Your Payment
-            </DialogTitle>
-            <DialogDescription className="text-gray-600 mt-2">
-              Connect your account with Stripe to start receiving payments.
-              Without connecting, users won&apos;t be able to book you.
-            </DialogDescription>
-          </DialogHeader>
-          <div className="flex gap-4 mt-6">
-            <button
-              onClick={() => {
-                setOpenModal(false);
-                router.push("/auth/login");
-              }}
-              className="border border-primary text-secondary py-2 px-4 rounded-[6px] w-1/2 font-medium hover:bg-gray-50 transition"
-            >
-              Skip for Now
-            </button>
-            <button
-              onClick={() => {
-                if (stripeLink) window.location.href = stripeLink;
-              }}
-              className="bg-primary text-white py-2 px-4 rounded-[6px] w-1/2 font-medium hover:bg-primary/90 transition"
-            >
-              Connect Stripe
-            </button>
-          </div>
-        </DialogContent>
-      </Dialog> */}
+      
     </>
   );
 };

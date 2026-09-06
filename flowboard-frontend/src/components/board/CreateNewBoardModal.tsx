@@ -64,14 +64,14 @@ const CreateBoardModal = () => {
   };
 
   return (
-    <Dialog open={open} onOpenChange={handleOpenChange}>
+    <Dialog  open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
-        <button className="px-3 flex items-center gap-1 py-3 rounded-[6px] bg-primary text-white font-medium hover:bg-primary/90 transition">
+        <button className="px-3 flex items-center gap-1 py-2 rounded-[6px] bg-primary text-white font-medium hover:bg-primary/90 transition">
           <Plus size={17}></Plus>  Create Board
         </button>
       </DialogTrigger>
 
-      <DialogContent className="sm:max-w-[440px] bg-white !rounded-[8px] p-6">
+      <DialogContent className="sm:max-w-[440px]  bg-white !rounded-[8px] p-6">
         <DialogHeader>
           <DialogTitle className="text-lg font-semibold">
             Create new board

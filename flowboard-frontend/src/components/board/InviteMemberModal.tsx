@@ -62,7 +62,7 @@ const InviteMemberModal = ({ boardId }: { boardId: string }) => {
           type="button"
           className="inline-flex shrink-0 items-center gap-1.5 rounded-[9px] border border-gray-200 bg-white px-2.5 py-2 text-xs font-semibold text-gray-700 shadow-sm transition hover:bg-gray-50"
         >
-          <Users size={13} className="text-indigo-500" />
+          <Users size={13} className="text-primary" />
           Invite members          
         </button>
       </DialogTrigger>
@@ -126,7 +126,7 @@ const InviteMemberModal = ({ boardId }: { boardId: string }) => {
                       }
                       disabled={Boolean(invitingMemberId)}
                       aria-label={`Invite role for ${member.fullName || "member"}`}
-                      className="h-8 rounded-[6px] border border-gray-200 bg-white px-2 text-xs font-medium text-gray-700 outline-none transition focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 disabled:cursor-not-allowed disabled:bg-gray-100"
+                      className="h-8 rounded-[6px] border border-gray-200 bg-white px-2 text-xs font-medium text-gray-700 outline-none transition  disabled:cursor-not-allowed disabled:bg-gray-100"
                     >
                       <option value="VIEWER">Viewer</option>
                       <option value="EDITOR">Editor</option>
@@ -135,7 +135,7 @@ const InviteMemberModal = ({ boardId }: { boardId: string }) => {
                       type="button"
                       disabled={Boolean(invitingMemberId)}
                       onClick={() => handleInviteMember(member.id)}
-                      className="inline-flex h-8 items-center gap-1.5 rounded-[6px] bg-indigo-600 px-2.5 text-xs font-semibold text-white transition hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60"
+                      className="inline-flex h-8 items-center gap-1.5 rounded-[6px] bg-primary px-2.5 text-xs font-semibold text-white transition  disabled:cursor-not-allowed disabled:opacity-60"
                     >
                       {isInvitingMember && (
                         <Loader2 size={13} className="animate-spin" />

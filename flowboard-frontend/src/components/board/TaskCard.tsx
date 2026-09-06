@@ -99,7 +99,7 @@ const TaskCard = ({
               onChange={(e) => setEditTitle(e.target.value)}
               onKeyDown={handleKeyDown}
               disabled={isSaving}
-              className="w-full rounded-[9px] border border-blue-500 bg-transparent px-2.5 py-1.5 text-sm text-zinc-900 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:text-zinc-100"
+              className="w-full rounded-[9px] border border-primary bg-transparent px-2.5 py-1.5 text-sm "
             />
             <div className="flex items-center justify-end gap-1.5">
               <button
@@ -117,7 +117,7 @@ const TaskCard = ({
                 type="button"
                 disabled={isSaving}
                 onClick={handleSave}
-                className="inline-flex items-center gap-1 rounded bg-blue-600 px-2 py-1 text-xs font-medium text-white hover:bg-blue-700"
+                className="inline-flex items-center gap-1 rounded bg-primary px-2 py-1 text-xs font-medium text-white"
               >
                 {isSaving ? (
                   <Loader2 className="h-3 w-3 animate-spin" />

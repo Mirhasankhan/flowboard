@@ -5,7 +5,7 @@ export const emailBody = (fullName: string, otp: string) => {
       
       <!-- Header -->
      <div style="background-color: #27c074ff; padding: 20px; text-align: center;">
-        <img src="https://nyc3.digitaloceanspaces.com/smtech-space/uploads/messages/files/1762406748731-7yj8hrmorob.png" alt="Company Logo" style="height: 80px; margin-bottom: 10px;" />
+        <img src="https://res.cloudinary.com/dbpao5h91/image/upload/v1788687904/uploads/users/profileImage/lb3t4l35tosl6bffpwic.png" alt="Company Logo" style="height: 80px; margin-bottom: 10px;" />
         <h2 style="color: #fff; margin: 0;">Sign Up Verification</h2>
       </div>
 
@@ -43,7 +43,7 @@ export const passwordResetEmailBody = (fullName: string, otp: string) => {
         <!-- Header -->
         <div style="background-color: #27c074ff; padding: 20px; text-align: center;">
           <img
-            src="https://nyc3.digitaloceanspaces.com/smtech-space/uploads/messages/files/1762406748731-7yj8hrmorob.png"
+            src="https://res.cloudinary.com/dbpao5h91/image/upload/v1788687904/uploads/users/profileImage/lb3t4l35tosl6bffpwic.png"
             alt="Company Logo"
             style="height: 80px; margin-bottom: 10px;"
           />
@@ -99,7 +99,7 @@ export const boardInvitationEmailBody = (
       <div style="max-width: 560px; margin: auto; background: #fff; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); overflow: hidden;">
         <div style="background-color: #27c074; padding: 24px; text-align: center;">
           <img
-            src="https://nyc3.digitaloceanspaces.com/smtech-space/uploads/messages/files/1762406748731-7yj8hrmorob.png"
+            src="https://res.cloudinary.com/dbpao5h91/image/upload/v1788687904/uploads/users/profileImage/lb3t4l35tosl6bffpwic.png"
             alt="Flowboard logo"
             style="height: 64px; margin-bottom: 12px;"
           />

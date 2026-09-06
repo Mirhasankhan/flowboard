@@ -165,7 +165,7 @@ const EditProfileModal = ({
               onChange={(e) => setFullName(e.target.value)}
               disabled={isLoading}
               placeholder="Enter your full name"
-              className="w-full rounded-[9px] border border-zinc-200 bg-zinc-50 px-3.5 py-2 text-sm text-zinc-900 focus:border-blue-500 focus:bg-white focus:outline-none dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100"
+              className="input-design"
             />
           </div>
 
@@ -197,7 +197,7 @@ const EditProfileModal = ({
             <button
               type="submit"
               disabled={isLoading || !fullName.trim()}
-              className="inline-flex items-center gap-1.5 rounded-[9px] bg-blue-600 px-4 py-2 text-xs font-semibold text-white shadow-sm transition hover:bg-blue-700 disabled:opacity-50"
+              className="inline-flex items-center gap-1.5 rounded-[9px]  px-4 py-2 text-xs font-semibold text-white shadow-sm transition disabled:opacity-50 bg-primary"
             >
               {isLoading && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
               Save Changes

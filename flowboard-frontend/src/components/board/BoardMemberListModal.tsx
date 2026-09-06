@@ -44,9 +44,9 @@ const BoardMembersModal = ({ members, isEditAccess }: BoardMembersModalProps) =>
           type="button"
           className="inline-flex shrink-0 items-center gap-1.5 rounded-[9px] border border-gray-200 bg-white px-2.5 py-1.5 text-xs font-semibold text-gray-700 shadow-sm transition hover:bg-gray-50"
         >
-          <Users size={13} className="text-indigo-500" />
+          <Users size={13} className="text-primary" />
           View members
-          <span className="rounded bg-indigo-50 px-1.5 py-0.5 text-[10px] font-semibold text-indigo-700">
+          <span className="rounded bg-primary/10 px-1.5 py-0.5 text-[10px] font-semibold text-primary">
             {members.length}
           </span>
         </button>

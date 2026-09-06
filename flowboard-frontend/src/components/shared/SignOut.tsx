@@ -1,6 +1,5 @@
 import { setUser } from "@/redux/features/auth/authSlice";
 import { useAppDispatch } from "@/redux/hooks";
-import {  LogOut } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 
@@ -23,7 +22,7 @@ const SignOut = () => {
   return (
     <button
       onClick={() => logOut()}
-      className="bg-transparent border text-red-600 border-red-600 px-5 py-2 rounded-[6px]"
+      className="bg-transparent border text-red-600 border-red-600 px-3 md:px-5 py-2 rounded-[6px]"
     >
       
       Sign Out

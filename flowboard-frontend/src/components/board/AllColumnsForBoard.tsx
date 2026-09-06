@@ -351,6 +351,7 @@ const AllColumnsForBoard = ({ board }: AllColumnsForBoardProps) => {
                   autoFocus
                   value={newColumnTitle}
                   onChange={(e) => setNewColumnTitle(e.target.value)}
+                  minLength={3}
                   onKeyDown={(e) => {
                     if (e.key === "Escape") {
                       setIsAddingColumn(false);
@@ -359,12 +360,12 @@ const AllColumnsForBoard = ({ board }: AllColumnsForBoardProps) => {
                   }}
                   disabled={isCreatingColumn}
                   placeholder="Column title..."
-                  className="rounded-[9px] border border-blue-500 bg-white px-3 py-1.5 text-sm text-zinc-900 shadow-sm focus:outline-none dark:bg-zinc-900 dark:text-zinc-100"
+                  className="input-design"
                 />
                 <button
                   type="submit"
                   disabled={isCreatingColumn || !newColumnTitle.trim()}
-                  className="inline-flex items-center gap-1.5 rounded-[9px] bg-blue-600 px-3.5 py-1.5 text-xs font-semibold text-white transition hover:bg-blue-700 disabled:opacity-50"
+                  className="inline-flex items-center gap-1.5 rounded-[9px] bg-primary px-3.5 py-1.5 text-xs font-semibold text-white transition hover:bg-primary/80 disabled:opacity-50"
                 >
                   {isCreatingColumn && <Loader2 className="h-3 w-3 animate-spin" />}
                   Add
@@ -385,7 +386,7 @@ const AllColumnsForBoard = ({ board }: AllColumnsForBoardProps) => {
               <button
                 type="button"
                 onClick={() => setIsAddingColumn(true)}
-                className="inline-flex items-center gap-1.5 rounded-[9px] bg-blue-600 px-3.5 py-2 text-xs font-semibold text-white shadow-sm transition hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-700"
+                className="inline-flex items-center gap-1.5 rounded-[9px] bg-primary px-3.5 py-2 text-xs font-semibold text-white shadow-sm transition"
               >
                 <Plus className="h-4 w-4" />
                 Add Column
@@ -395,26 +396,44 @@ const AllColumnsForBoard = ({ board }: AllColumnsForBoardProps) => {
         )}
       </div>
 
-      {/* 3-column responsive grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 items-start pb-6">
-        {columns.map((col, idx) => (
-          <BoardColumn
-            key={col.id}
-            column={col}
-            columnIndex={idx}
-            isEditable={isEditable}
-            onUpdateColumnTitle={handleUpdateColumnTitle}
-            onDeleteColumn={confirmDeleteColumn}
-            onAddTask={handleAddTask}
-            onUpdateTaskTitle={handleUpdateTaskTitle}
-            onDeleteTask={confirmDeleteTask}
-            onColumnDragStart={handleColumnDragStart}
-            onColumnDrop={handleColumnDrop}
-            onTaskDragStart={handleTaskDragStart}
-            onTaskDropOnColumn={handleTaskDropOnColumn}
-          />
-        ))}
-      </div>
+      {/* 3-column responsive grid or empty state */}
+      {columns.length === 0 ? (
+        <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-zinc-300 py-16 px-4 text-center dark:border-zinc-800 my-4 bg-zinc-50/50 dark:bg-zinc-900/30">
+          <p className="text-base font-medium text-zinc-600 dark:text-zinc-400">
+            No column added in this board yet.
+          </p>
+          {isEditable && !isAddingColumn && (
+            <button
+              type="button"
+              onClick={() => setIsAddingColumn(true)}
+              className="mt-4 inline-flex items-center gap-1.5 rounded-[9px] bg-primary px-4 py-2 text-xs font-semibold text-white shadow-sm transition hover:bg-primary/90"
+            >
+              <Plus className="h-4 w-4" />
+              Add First Column
+            </button>
+          )}
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 items-start pb-6">
+          {columns.map((col, idx) => (
+            <BoardColumn
+              key={col.id}
+              column={col}
+              columnIndex={idx}
+              isEditable={isEditable}
+              onUpdateColumnTitle={handleUpdateColumnTitle}
+              onDeleteColumn={confirmDeleteColumn}
+              onAddTask={handleAddTask}
+              onUpdateTaskTitle={handleUpdateTaskTitle}
+              onDeleteTask={confirmDeleteTask}
+              onColumnDragStart={handleColumnDragStart}
+              onColumnDrop={handleColumnDrop}
+              onTaskDragStart={handleTaskDragStart}
+              onTaskDropOnColumn={handleTaskDropOnColumn}
+            />
+          ))}
+        </div>
+      )}
 
       {/* Delete Confirmation Modal */}
       <DeleteConfirmModal

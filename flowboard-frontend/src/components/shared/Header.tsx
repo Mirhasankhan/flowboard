@@ -3,9 +3,8 @@
 import Container from "@/utils/Container";
 import Link from "next/link";
 import Image from "next/image";
-import logo from "../../assets/logo.jpeg";
 import { useProfileQuery } from "@/redux/features/auth/authApi";
-import { Pencil, User } from "lucide-react";
+import { User } from "lucide-react";
 import { useState } from "react";
 import EditProfileModal from "./EditProfileModal";
 import SignOut from "./SignOut";
@@ -29,7 +28,7 @@ const Header = () => {
                             fontFamily: "'Satisfy', cursive",
                         }}
                         href="/"
-                        className="flex text-green-600 text-3xl font-bold items-center gap-2"
+                        className="flex text-green-600 text-xl md:text-3xl font-bold items-center gap-2"
                     >
                         <span className="tracking-wide">Flowboard</span>
                     </Link>

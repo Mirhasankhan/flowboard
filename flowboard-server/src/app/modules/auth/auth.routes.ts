@@ -9,7 +9,7 @@ const router = express.Router();
 
 router.post(
   "/login",
-  rateLimiter(1, 7),
+  rateLimiter(1, 3),
   validateRequest(authValidation.loginSchema),
   authController.loginUser,
 );
@@ -27,12 +27,13 @@ router.post(
 );
 router.post(
   "/verify-otp", 
+  rateLimiter(1, 2),
   validateRequest(authValidation.verifyOtpSchema),
   authController.verifyForgotPasswordOtpCode,
 );
 router.patch(
   "/reset-password",
-  auth(),
+  auth(),  
   validateRequest(authValidation.resetPasswordSchema),
   authController.resetPassword,
 );
