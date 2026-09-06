@@ -1,71 +1,136 @@
-# Juri Link — Frontend
+# Flowboard — Frontend
 
-Juri Link is a Next.js frontend for a legal services marketplace. It provides pages for browsing lawyers and services, creating posts, booking and messaging, and managing user and lawyer profiles.
+A modern task and project management client built with Next.js 15, React 19, TypeScript, Tailwind CSS, and Redux Toolkit.
 
-**This repository** contains the Next.js app (React + TypeScript) used to render the client-facing UI.
+---
 
-**Key features**
+## Tech Stack
 
-- **Browse & Search:** Lawyer and service search and filtering.
-- **Bookings & Availability:** Lawyer availability, booking flow, and earnings pages.
-- **Messaging:** Real-time chat and image upload support.
-- **Profiles & Posts:** User and lawyer profiles, posts, and reviews.
+- **Framework:** Next.js 15 (App Router)
+- **UI Library:** React 19, Tailwind CSS, Radix UI, Lucide React, Framer Motion
+- **State Management:** Redux Toolkit & Redux Persist
+- **Forms & Validation:** React Hook Form, Zod
+- **Authentication & API:** Axios, js-cookie, Google OAuth
 
-**Tech stack**
+---
 
-- **Framework:** Next.js (app router)
-- **Language:** TypeScript
-- **Styling:** Tailwind CSS
-- **State:** Redux (store in `src/redux`)
-- **Other:** Socket-based messaging, Prisma (backend expected), and various React components in `src/components`.
+## Prerequisites
 
-Quick links
+Before starting, ensure you have:
 
-- App entry: [src/app/page.tsx](src/app/page.tsx)
-- Components: [src/components](src/components)
-- Styles: [src/app/globals.css](src/app/globals.css)
+- [Node.js](https://nodejs.org/) (v18 or v20+)
+- [npm](https://www.npmjs.com/)
+- Running backend API (via Docker Compose or manual setup on port `4078`)
 
-Getting started
+---
 
-1. Install dependencies
+## How to Run Locally
+
+Follow these steps to run the frontend application on your local machine:
+
+### 1. Navigate to the Frontend Directory
+
+```bash
+cd flowboard-frontend
+```
+
+### 2. Install Dependencies
 
 ```bash
 npm install
 ```
 
-2. Run the development server
+### 3. Set Up Environment Variables
+
+Create a `.env.local` file by copying the example:
+
+```bash
+cp .env.example .env.local
+```
+
+*(See the [Environment Variables](#environment-variables-envlocal-instructions) section below for details)*
+
+### 4. Start the Development Server
 
 ```bash
 npm run dev
 ```
 
-Open http://localhost:3000 in your browser.
+### 5. Access the Application
 
-Available scripts (from `package.json`)
+Open your browser and navigate to:
+```
+http://localhost:3000
+```
 
-- `dev` — start Next.js in development mode
-- `build` — build for production
-- `start` — start the production server after `build`
-- `lint` — run ESLint
+> **Note:** Ensure your backend server is running (e.g. `http://localhost:4078`) so that authentication, board management, and task updates can communicate properly.
 
-Environment
+---
 
-- This frontend expects a backend API and auth provider. Configure environment variables in a `.env.local` at the repo root if required by your local setup (for example API base URL, auth keys, etc.).
+## Environment Variables (`.env.local`) Instructions
 
-Project structure (high level)
+Create a `.env.local` (or `.env`) file in the `flowboard-frontend` directory:
 
-- `src/app` — Next.js app routes and pages (React Server Components + client components)
-- `src/components` — UI components organized by feature (home, lawyers, posts, profile, message, etc.)
-- `src/redux` — Redux store and feature slices
-- `src/lib` / `src/utils` — helper utilities and providers
-- `public` — static assets (images, videos)
+```bash
+cp .env.example .env.local
+```
 
-Contributing
+### Example `.env.local` File
 
-- Open issues and PRs to the `main` branch. Add clear descriptions and screenshots when relevant.
+```env
+# Backend API Base URL (points to your Express backend)
+NEXT_PUBLIC_BASE_URL=http://localhost:4078/api/v1
 
-License
+# Google OAuth Client ID (Optional / for Google login)
+NEXT_PUBLIC_GOOGLE_CLIENT_ID=your_google_client_id_here
+```
 
-- See the repository license (if any). If none, add a LICENSE file or contact the project owner for guidance.
+### Environment Variable Reference
 
-If you'd like, I can expand this README with setup details for the backend, environment variable examples, or developer workflows (linting, formatting, testing).
+| Variable | Required | Description | Example / Default |
+| :--- | :--- | :--- | :--- |
+| `NEXT_PUBLIC_BASE_URL` | **Yes** | The base URL of the Flowboard Express backend API | `http://localhost:4078/api/v1` |
+| `NEXT_PUBLIC_GOOGLE_CLIENT_ID` | No | Google OAuth Client ID for social sign-in | `your-id.apps.googleusercontent.com` |
+
+---
+
+## Available NPM Scripts
+
+| Command | Description |
+| :--- | :--- |
+| `npm run dev` | Starts Next.js development server with Turbopack (`http://localhost:3000`) |
+| `npm run build` | Builds the optimized production application |
+| `npm run start` | Runs the production server build (configured on port `3060`) |
+| `npm run lint` | Runs ESLint to check for code issues |
+
+---
+
+## Project Structure
+
+```
+flowboard-frontend/
+├── public/                 # Static assets (images, icons, etc.)
+├── src/
+│   ├── app/                # Next.js App Router pages and layouts
+│   ├── components/         # Reusable UI components
+│   ├── redux/              # Redux slices, store configuration & hooks
+│   ├── types/              # TypeScript interfaces and types
+│   ├── utils/              # Helper functions, api client, and cookies
+│   └── styles/             # Global CSS and Tailwind configurations
+├── .env.example            # Example environment variables
+├── package.json            # Project dependencies and scripts
+├── tailwind.config.js      # Tailwind CSS theme configuration
+├── tsconfig.json           # TypeScript configuration
+└── README.md
+```
+
+---
+
+## Troubleshooting
+
+- **API Requests Failing (`ERR_CONNECTION_REFUSED` / CORS error):**
+  - Verify that the backend server is running at `http://localhost:4078`.
+  - Check `NEXT_PUBLIC_BASE_URL` in `.env.local` to ensure it matches the backend route prefix (default: `http://localhost:4078/api/v1`).
+  - Verify `CORS_ORIGINS` in your backend `.env` includes `http://localhost:3000`.
+- **Google Sign-In Issues:**
+  - Ensure `NEXT_PUBLIC_GOOGLE_CLIENT_ID` matches your authorized Google Cloud Console OAuth 2.0 Client credentials with `http://localhost:3000` added as an authorized Javascript origin.

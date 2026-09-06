@@ -1,331 +1,220 @@
-# Vertical City Properties Backend
+# Flowboard — Backend API
 
-A backend API built with Express, Prisma ORM, and PostgreSQL.
-
-This project uses PostgreSQL with Prisma ORM for schema management and database migrations. It can run using either a local PostgreSQL instance or a managed Supabase PostgreSQL database.
+Backend REST API for Flowboard built with Express, TypeScript, Prisma ORM, and PostgreSQL.
 
 ---
 
-# Tech Stack
+## Tech Stack
 
-- Node.js
-- Express.js
-- TypeScript
-- Prisma ORM
-- PostgreSQL
-- Supabase (optional)
-- DigitalOcean Spaces / S3 Compatible Storage
+- **Runtime & Language:** Node.js (v20+ recommended), TypeScript
+- **Framework:** Express.js
+- **Database & ORM:** PostgreSQL, Prisma ORM
+- **Authentication:** JWT, Bcrypt
+- **Containerization:** Docker & Docker Compose
 
 ---
 
-# Prerequisites
+## Prerequisites
 
-Before you begin, ensure you have the following installed:
+Ensure you have the following installed on your local machine:
 
-- Node.js (v18 or higher recommended)
-- npm or yarn
-- PostgreSQL (or a Supabase PostgreSQL project)
-- Git
-
----
-
-# Getting Started
-
-## 1. Clone the Repository
-
-```bash
-git clone https://github.com/your-username/your-repo-name.git
-cd your-repo-name
-```
+- [Node.js](https://nodejs.org/) (v18 or v20+)
+- [npm](https://www.npmjs.com/) (bundled with Node)
+- [Git](https://git-scm.com/)
+- [Docker & Docker Desktop](https://www.docker.com/) *(recommended for the easiest setup)*
 
 ---
 
-## 2. Install Dependencies
+## How to Run Locally
 
-```bash
-npm install
-```
+You can run the backend in two ways: **Option A (Docker - Recommended)** or **Option B (Manual Node setup)**.
 
 ---
 
-## 3. Set Up Environment Variables
+### Option A: Run with Docker Compose (Recommended)
 
-Create a `.env` file by copying the example file.
+This is the quickest way to start the PostgreSQL database and the Express API together with zero manual database configuration.
+
+1. **Navigate to the root directory of the workspace (`flowboard/`):**
+   ```bash
+   cd flowboard
+   ```
+
+2. **Start the containers:**
+   ```bash
+   docker compose up
+   ```
+   *(Add `-d` to run in detached background mode: `docker compose up -d`)*
+
+   **What this does automatically:**
+   - Starts a PostgreSQL 16 container.
+   - Waits until PostgreSQL passes its healthcheck.
+   - Generates Prisma client and executes all migrations (`npx prisma migrate deploy`).
+   - Starts the Express API server on `http://localhost:4078`.
+
+3. **Useful Docker Commands:**
+   - **View live logs:**
+     ```bash
+     docker compose logs -f api
+     ```
+   - **Rebuild containers after dependency/code changes:**
+     ```bash
+     docker compose up --build
+     ```
+   - **Stop containers:**
+     ```bash
+     docker compose down
+     ```
+   - **Stop and reset database volume:**
+     ```bash
+     docker compose down -v
+     ```
+
+---
+
+### Option B: Run Manually (Local Node + PostgreSQL)
+
+If you have a local PostgreSQL instance running or are using a cloud database (like Supabase/Neon/Render):
+
+1. **Navigate to the backend directory:**
+   ```bash
+   cd flowboard-server
+   ```
+
+2. **Install dependencies:**
+   ```bash
+   npm install
+   ```
+
+3. **Set up your `.env` file:**
+   ```bash
+   cp .env.example .env
+   ```
+   *(See the [Environment Variables](#environment-variables-env-instructions) section below to fill in your values)*
+
+4. **Generate the Prisma Client:**
+   ```bash
+   npx prisma generate
+   ```
+
+5. **Apply Database Migrations:**
+   ```bash
+   npx prisma migrate dev
+   ```
+   *(Or for existing migrations: `npx prisma migrate deploy`)*
+
+
+7. **Start the development server:**
+   ```bash
+   npm run dev
+   ```
+
+   The server will start at:
+   ```
+   http://localhost:4078
+   ```
+
+---
+
+## Environment Variables (`.env`) Instructions
+
+Create a `.env` file in the `flowboard-server` directory:
 
 ```bash
 cp .env.example .env
 ```
 
-Update the values inside `.env`:
+### Example `.env` Configuration
 
 ```env
-# PostgreSQL
-DATABASE_URL="postgresql://USER:PASSWORD@HOST:PORT/DATABASE?pgbouncer=true"
+# PostgreSQL Connection Strings
+# Local PostgreSQL / Docker format:
+DATABASE_URL="postgresql://postgres:postgres@localhost:5432/flowboard?schema=public"
+DIRECT_URL="postgresql://postgres:postgres@localhost:5432/flowboard?schema=public"
 
-DIRECT_URL="postgresql://USER:PASSWORD@HOST:PORT/DATABASE"
+# For Supabase / Connection Poolers (optional):
+# DATABASE_URL="postgresql://USER:PASSWORD@HOST:PORT/DATABASE?pgbouncer=true"
+# DIRECT_URL="postgresql://USER:PASSWORD@HOST:PORT/DATABASE"
 
-# Server
-PORT=4046
-BACKEND_BASE_URL=http://localhost:4046
+# Server Configuration
+PORT=4078
+NODE_ENV=development
 
-# Bucket Configuration
-BUCKET_NAME=your_bucket_name
-BUCKET_REGION=your_region
-BUCKET_ACCESS_KEY=your_access_key
-BUCKET_SECRET_KEY=your_secret_key
-BUCKET_ENDPOINT=your_bucket_endpoint
-
-# JWT
-JWT_SECRET=your_secret
-JWT_COMMAND=your_command
+# JWT & Security Configuration
+JWT_SECRET=your_jwt_secret_key_here
 GEN_SALT=10
 EXPIRES_IN=45d
-NODE_ENV=production
+BCRYPT_SALT_ROUNDS=12
 
-# Email
-EMAIL=your_email
-APP_PASS=your_app_password
+# Email Configuration (Nodemailer / SMTP)
+EMAIL="your_email@gmail.com"
+APP_PASS="your_gmail_app_password"
+
+# Cloudinary Configuration (Optional - for file/image uploads)
+CLOUDNAME="YOUR_CLOUD_NAME"
+API_KEY="YOUR_API_KEY"
+API_SECRET="YOUR_API_SECRET"
+
+# CORS Configuration (comma-separated origins)
+CORS_ORIGINS=http://localhost:3000,http://localhost:3060
 ```
 
 ### Environment Variable Reference
 
-| Variable | Description |
-|----------|-------------|
-| `DATABASE_URL` | PostgreSQL pooled connection used by the application |
-| `DIRECT_URL` | Direct PostgreSQL connection used by Prisma migrations |
-| `PORT` | Server port |
-| `BACKEND_BASE_URL` | Backend base URL |
-| `BUCKET_NAME` | Storage bucket name |
-| `BUCKET_REGION` | Storage bucket region |
-| `BUCKET_ACCESS_KEY` | Storage access key |
-| `BUCKET_SECRET_KEY` | Storage secret key |
-| `BUCKET_ENDPOINT` | Storage endpoint URL |
-| `JWT_SECRET` | Secret used to sign JWT tokens |
-| `JWT_COMMAND` | JWT command/key used by the application |
-| `GEN_SALT` | Bcrypt salt rounds |
-| `EXPIRES_IN` | JWT expiration time |
-| `EMAIL` | SMTP email address |
-| `APP_PASS` | SMTP app password |
-| `NODE_ENV` | HTTP cookie mode |
-| `CORS_ORIGINS`  | allowed routes list, comma separated | 
-
-> **Note:** Make sure your PostgreSQL/Supabase database is accessible before running Prisma migrations.
+| Variable | Required | Description | Example / Default |
+| :--- | :--- | :--- | :--- |
+| `DATABASE_URL` | **Yes** | PostgreSQL connection URL for Prisma Client queries | `postgresql://postgres:postgres@localhost:5432/flowboard?schema=public` |
+| `DIRECT_URL` | **Yes** | Direct PostgreSQL connection for Prisma schema migrations | `postgresql://postgres:postgres@localhost:5432/flowboard?schema=public` |
+| `PORT` | No | Port on which the Express server listens | `4078` |
+| `NODE_ENV` | No | Application environment (`development` / `production`) | `development` |
+| `JWT_SECRET` | **Yes** | Secret string for signing and verifying JWT tokens | `secret` |
+| `GEN_SALT` | No | Salt rounds for hashing | `10` |
+| `EXPIRES_IN` | No | JWT token expiry duration | `45d` |
+| `BCRYPT_SALT_ROUNDS` | No | Bcrypt hashing rounds | `12` |
+| `CORS_ORIGINS` | No | Allowed frontend origins (comma-separated) | `http://localhost:3000,http://localhost:3060` |
+| `EMAIL` | No | SMTP email address for sending verification/OTP emails | `user@example.com` |
+| `APP_PASS` | No | SMTP application password | `app_password` |
+| `CLOUDNAME` | No | Cloudinary cloud name for media storage | `your_cloud_name` |
+| `API_KEY` | No | Cloudinary API Key | `your_api_key` |
+| `API_SECRET` | No | Cloudinary API Secret | `your_api_secret` |
 
 ---
 
-## 4. Generate Prisma Client
-
-```bash
-npx prisma generate
-```
-
----
-
-## 5. Run Database Migrations
-
-For local development:
-
-```bash
-npx prisma migrate dev --name init
-```
-
-For production deployments:
-
-```bash
-npx prisma migrate deploy
-```
-
----
-
-## 6. Seed the Database
-
-```bash
-npx prisma db seed
-```
-
----
-
-## 7. Start the Development Server
-
-```bash
-npm run dev
-```
-
-The server will start on:
-
-```
-http://localhost:4046
-```
-
----
-
-# PostgreSQL / Supabase Setup
-
-## Local PostgreSQL
-
-```env
-DATABASE_URL="postgresql://postgres:your_password@localhost:5432/your_database?schema=public"
-```
-
----
-
-## Supabase PostgreSQL
-
-```env
-DATABASE_URL="postgresql://USER:PASSWORD@HOST:PORT/DATABASE?pgbouncer=true"
-
-DIRECT_URL="postgresql://USER:PASSWORD@HOST:PORT/DATABASE"
-```
-
-Use:
-
-- `DATABASE_URL` for pooled connections
-- `DIRECT_URL` for Prisma migrations and schema operations
-
----
-
-# Deployment
-
-## Production Deployment Steps
-
-### 1. Install Dependencies
-
-```bash
-npm install
-```
-
-### 2. Configure Environment Variables
-
-Create your production `.env` file with the correct values for:
-
-- PostgreSQL / Supabase
-- Bucket Storage
-- JWT
-- Email
-- Backend URL
-
-### 3. Generate Prisma Client
-
-```bash
-npx prisma generate
-```
-
-### 4. Apply Database Migrations
-
-```bash
-npx prisma migrate deploy
-```
-
-### 5. (Optional) Seed the Database
-
-```bash
-npx prisma db seed
-```
-
-### 6. Build the Project
-
-```bash
-npm run build
-```
-
-### 7. Start the Server
-
-```bash
-npm run start:prod
-```
-
-If using PM2:
-
-```bash
-pm2 start dist/server.js --name vertical-city-backend
-```
-
----
-
-# Available Scripts
+## Available NPM Scripts
 
 | Command | Description |
-|----------|-------------|
-| `npm run dev` | Start development server |
-| `npm run build` | Compile TypeScript |
-| `npm run start:prod` | Run production build |
-| `npx prisma studio` | Open Prisma Studio |
-| `npx prisma generate` | Generate Prisma Client |
-| `npx prisma migrate dev` | Create and apply development migrations |
-| `npx prisma migrate deploy` | Apply existing migrations in production |
-| `npx prisma db seed` | Seed the database |
+| :--- | :--- |
+| `npm run dev` | Start development server with live reload (`ts-node-dev`) |
+| `npm run build` | Compile TypeScript to JavaScript in `dist/` |
+| `npm run start:prod` | Run the compiled production build from `dist/server.js` |
+| `npx prisma studio` | Open Prisma Studio visual database editor (`http://localhost:5555`) |
+| `npx prisma generate` | Generate Prisma client from `prisma/schema.prisma` |
+| `npx prisma migrate dev` | Create and apply database migrations in development |
+| `npx prisma migrate deploy` | Apply pending migrations to the database |
+| `npx prisma db seed` | Run database seeding script (`prisma/seed.ts`) |
 
 ---
 
-# Project Structure
+## Exploring the Database (Prisma Studio)
 
-```
-.
-├── prisma/
-│   ├── schema.prisma
-│   └── seed.ts
-├── src/
-│   ├── controllers/
-│   ├── routes/
-│   ├── middleware/
-│   ├── services/
-│   ├── utils/
-│   ├── lib/
-│   │   └── prisma.ts
-│   └── index.ts
-├── .env.example
-├── package.json
-└── README.md
-```
-
----
-
-# Viewing Your Data
-
-Launch Prisma Studio:
+To inspect and manage database records through a web UI:
 
 ```bash
 npx prisma studio
 ```
-
-It will open at:
-
+Navigate to:
 ```
 http://localhost:5555
 ```
 
 ---
 
-# Troubleshooting
+## Troubleshooting
 
-### P1001 / Database Connection Error
-
-- Verify PostgreSQL/Supabase is running.
-- Check `DATABASE_URL` and `DIRECT_URL`.
-- Ensure your IP is allowed to access the database.
-
----
-
-### Environment Variable Not Found
-
-Ensure:
-
-- `.env` exists
-- Variable names are correct
-- The application is loading the `.env` file
-
----
-
-### Prisma Client Out of Sync
-
-Regenerate Prisma Client:
-
-```bash
-npx prisma generate
-```
-
----
-
-# License
-
-This project is licensed under the MIT License.
+- **Database Connection Error (`P1001`):**
+  - If using Docker, ensure Docker Desktop is running and run `docker compose ps` to verify the `flowboard-postgres` container is healthy.
+  - If running manually, check that your local PostgreSQL service is active and credentials in `DATABASE_URL` are correct.
+- **Port Conflict (4078 or 5432 already in use):**
+  - Stop any existing PostgreSQL services or local processes bound to these ports before launching Docker.
+- **Prisma Client Out of Sync:**
+  - Run `npx prisma generate` to synchronize the Prisma Client with `prisma/schema.prisma`.
