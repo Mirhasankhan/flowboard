@@ -1,7 +1,8 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import Header from "@/components/shared/Header/Header";
+import Header from "../shared/Header";
+
 
 const authRoutes = [
   "/auth/login",
