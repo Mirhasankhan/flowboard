@@ -29,11 +29,12 @@ const updateColumnTitle = async (
   columnId: string,
   title: string,
 ) => {
-  await prisma.column.findUniqueOrThrow({
+  const column = await prisma.column.findUniqueOrThrow({
     where: { id: columnId },
+    select: { boardId: true },
   });
 
-  await checkBoardEditorAccess(columnId, userId);
+  await checkBoardEditorAccess(column.boardId, userId);
 
   await prisma.column.update({
     where: { id: columnId },
@@ -76,7 +77,12 @@ const reorderColumn = async (
 };
 
 const deleteColumnById = async (userId: string, columnId: string) => {
-  await checkBoardEditorAccess(columnId, userId);
+  const column = await prisma.column.findUniqueOrThrow({
+    where: { id: columnId },
+    select: { boardId: true },
+  });
+
+  await checkBoardEditorAccess(column.boardId, userId);
 
   await prisma.column.delete({
     where: { id: columnId },

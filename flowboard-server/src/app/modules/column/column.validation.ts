@@ -15,7 +15,7 @@ const columnReorderSchema = z.object({
   targetIndex: z
     .number()
     .int()
-    .positive("Target index must be a positive integer"),
+    .min(0, "Target index must be a non-negative integer"),
 });
 
 export const columnValidation = {

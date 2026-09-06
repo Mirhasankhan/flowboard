@@ -4,7 +4,6 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import logo from "../../../assets/logo.jpeg";
 import Image from "next/image";
 import { TLoginValues } from "@/types/common";
-import { Checkbox } from "@/components/ui/checkbox";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useLoginMutation } from "@/redux/features/auth/authApi";
@@ -79,7 +78,7 @@ const Login = () => {
 
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className="rounded-lg pt-6 bg-white"
+          className="rounded-[9px] pt-6 bg-white"
         >
           <div className="mb-4">
             <label className="label-design pb-1">Email Address</label>
@@ -107,14 +106,14 @@ const Login = () => {
               <p className="text-red-500 text-sm">{errors.password.message}</p>
             )}
           </div>
-          <div className="flex justify-between items-center py-3">         
+          <div className="flex justify-between items-center py-3">
             <Link
               href="/auth/reset-password"
               className="text-secondary hover:underline"
             >
               Forgot Password?
             </Link>
-          </div>      
+          </div>
           <button
             disabled={isLoading}
             type="submit"
@@ -148,7 +147,7 @@ const Login = () => {
             )}
           </button>
         </form>
-       
+
         <div className="text-center text-gray-700 pt-4">
           Dont have an account?
           <Link href="/auth/register" className="text-secondary hover:underline">

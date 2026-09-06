@@ -19,7 +19,7 @@ const ServiceHero = () => {
         <div className="flex flex-wrap gap-3.5">
           <button
             type="button"
-            className="inline-flex items-center gap-2 rounded-lg border border-[#dde2ea] bg-white px-4 py-2.5 text-sm font-semibold text-[#1a2b4c] hover:border-[#c4cce0] hover:bg-[#f9fafc]"
+            className="inline-flex items-center gap-2 rounded-[9px] border border-[#dde2ea] bg-white px-4 py-2.5 text-sm font-semibold text-[#1a2b4c] hover:border-[#c4cce0] hover:bg-[#f9fafc]"
           >
             <svg
               width="18"
@@ -38,7 +38,7 @@ const ServiceHero = () => {
 
           <button
             type="button"
-            className="inline-flex items-center gap-2 rounded-lg border border-[#dde2ea] bg-white px-4 py-2.5 text-sm font-semibold text-[#1a2b4c] hover:border-[#c4cce0] hover:bg-[#f9fafc]"
+            className="inline-flex items-center gap-2 rounded-[9px] border border-[#dde2ea] bg-white px-4 py-2.5 text-sm font-semibold text-[#1a2b4c] hover:border-[#c4cce0] hover:bg-[#f9fafc]"
           >
             <svg
               width="18"

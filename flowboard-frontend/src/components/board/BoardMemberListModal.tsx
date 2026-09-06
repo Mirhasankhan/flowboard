@@ -22,7 +22,7 @@ interface BoardMembersModalProps {
 }
 
 const BoardMembersModal = ({ members, isEditAccess }: BoardMembersModalProps) => {
-    const [removeMember] = useRemoveMemberMutation();
+  const [removeMember] = useRemoveMemberMutation();
   const [memberRoles, setMemberRoles] = useState<Record<string, string>>({});
   const [open, setOpen] = useState(false);
 
@@ -33,7 +33,7 @@ const BoardMembersModal = ({ members, isEditAccess }: BoardMembersModalProps) =>
         toast.success(response?.message || "Member removed successfully");
       }
     } finally {
-     
+
     }
   }
 
@@ -53,14 +53,14 @@ const BoardMembersModal = ({ members, isEditAccess }: BoardMembersModalProps) =>
       </DialogTrigger>
 
       <DialogContent className="bg-white !rounded-[8px] p-6 sm:max-w-[440px]">
-        <DialogHeader>         
-            <DialogTitle className="text-lg font-semibold">
-              People on this board
-            </DialogTitle>         
-       
+        <DialogHeader>
+          <DialogTitle className="text-lg font-semibold">
+            People on this board
+          </DialogTitle>
+
         </DialogHeader>
 
-        <div className="mt-2 flex max-h-[360px] flex-col divide-y divide-gray-100 overflow-y-auto rounded-md border border-gray-100">
+        <div className="mt-2 flex max-h-[360px] flex-col divide-y divide-gray-100 overflow-y-auto rounded-[6px] border border-gray-100">
           {members.map((member: any) => {
             const memberRole =
               memberRoles[member.id] || member.role || "VIEWER";
@@ -68,7 +68,7 @@ const BoardMembersModal = ({ members, isEditAccess }: BoardMembersModalProps) =>
 
             return (
               <div
-              
+
                 key={member.id}
                 className="flex min-w-0 items-center gap-2 bg-gray-50/60 px-2.5 py-2 first:rounded-t-md last:rounded-b-md"
               >
@@ -80,10 +80,10 @@ const BoardMembersModal = ({ members, isEditAccess }: BoardMembersModalProps) =>
                   className="h-[30px] w-[30px] shrink-0 rounded-full border border-white object-cover shadow-sm"
                 />
                 <p className="min-w-0 flex-1 truncate text-xs font-medium text-gray-900">
-                  {member.user?.fullName || "Unnamed member"} <br/>
+                  {member.user?.fullName || "Unnamed member"} <br />
                   <span className="text-[10px] text-gray-500">{member.user?.email}</span>
                 </p>
-               
+
                 <div className="relative shrink-0">
                   <select
                     value={memberRole.toUpperCase()}

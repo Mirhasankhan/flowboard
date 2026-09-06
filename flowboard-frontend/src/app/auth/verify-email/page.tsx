@@ -127,9 +127,8 @@ const VerifyEmail = () => {
             <button
               onClick={handleVerify}
               disabled={!isComplete || isLoading}
-              className={`w-full py-2 rounded-[6px] text-white font-semibold transition ${
-                isComplete ? "bg-primary hover:bg-primary/90" : "bg-gray-400"
-              }`}
+              className={`w-full py-2 rounded-[6px] text-white font-semibold transition ${isComplete ? "bg-primary hover:bg-primary/90" : "bg-gray-400"
+                }`}
             >
               {isLoading ? "Verifying..." : "Verify"}
             </button>
@@ -154,7 +153,7 @@ const VerifyEmail = () => {
       </div>
 
       {/* <Dialog open={openModal} onOpenChange={setOpenModal}>
-        <DialogContent className="sm:max-w-[420px] bg-white rounded-lg p-6 shadow-lg">
+        <DialogContent className="sm:max-w-[420px] bg-white rounded-[9px] p-6 shadow-lg">
           <DialogHeader>
             <DialogTitle className="text-xl font-semibold">
               Setup Your Payment

@@ -23,7 +23,7 @@ const Register = () => {
     const registerData = {
       fullName: data.fullName,
       email: data.email,
-      password: data.password     
+      password: data.password
     };
     formData.append("bodyData", JSON.stringify(formData));
     const response: any = await registerRequest(registerData);
@@ -37,7 +37,7 @@ const Register = () => {
   };
 
   return (
-    <div className="bg-[#f8f8f8] min-h-screen flex items-center justify-center">   
+    <div className="bg-[#f8f8f8] min-h-screen flex items-center justify-center">
 
       <div className="w-full md:w-2/5 xl:w-1/3 shadow-md md:mx-auto mx-2 py-12 px-6 dark:text-white bg-white rounded-[16px]">
         <Image
@@ -54,7 +54,7 @@ const Register = () => {
 
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className="rounded-lg py-6 bg-white"
+          className="rounded-[9px] py-6 bg-white"
         >
           <div className="mb-4">
             <label className="label-design pb-1">Full Name</label>
@@ -107,9 +107,8 @@ const Register = () => {
           <button
             disabled={isLoading}
             type="submit"
-            className={`${
-              isLoading ? "bg-primary/75" : "bg-primary"
-            } text-white py-3 mt-3 w-full font-medium rounded-[4px]`}
+            className={`${isLoading ? "bg-primary/75" : "bg-primary"
+              } text-white py-3 mt-3 w-full font-medium rounded-[4px]`}
           >
             {isLoading ? "Creating...." : "Create Account"}
           </button>

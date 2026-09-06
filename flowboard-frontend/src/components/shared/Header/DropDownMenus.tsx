@@ -11,7 +11,6 @@ import {
   CalendarCheck,
   LogOut,
   ChevronRight,
-  Shield,
   Sparkles,
 } from "lucide-react";
 import Link from "next/link";
@@ -96,7 +95,7 @@ const DropDownMenus = ({ setActive }: DropDownMenusProps) => {
           className="group flex items-center justify-between px-3 py-2.5 rounded-xl hover:bg-slate-50 text-slate-700 hover:text-primary transition-all duration-150"
         >
           <div className="flex items-center gap-2.5">
-            <div className="p-1.5 rounded-lg bg-slate-100 text-slate-600 group-hover:bg-primary/10 group-hover:text-primary transition-colors">
+            <div className="p-1.5 rounded-[9px] bg-slate-100 text-slate-600 group-hover:bg-primary/10 group-hover:text-primary transition-colors">
               <User className="w-4 h-4" />
             </div>
             <div>
@@ -113,7 +112,7 @@ const DropDownMenus = ({ setActive }: DropDownMenusProps) => {
           className="group flex items-center justify-between px-3 py-2.5 rounded-xl hover:bg-slate-50 text-slate-700 hover:text-primary transition-all duration-150"
         >
           <div className="flex items-center gap-2.5">
-            <div className="p-1.5 rounded-lg bg-slate-100 text-slate-600 group-hover:bg-primary/10 group-hover:text-primary transition-colors">
+            <div className="p-1.5 rounded-[9px] bg-slate-100 text-slate-600 group-hover:bg-primary/10 group-hover:text-primary transition-colors">
               <CalendarCheck className="w-4 h-4" />
             </div>
             <div>
@@ -132,7 +131,7 @@ const DropDownMenus = ({ setActive }: DropDownMenusProps) => {
               className="group flex items-center justify-between px-3 py-2.5 rounded-xl hover:bg-slate-50 text-slate-700 hover:text-primary transition-all duration-150"
             >
               <div className="flex items-center gap-2.5">
-                <div className="p-1.5 rounded-lg bg-slate-100 text-slate-600 group-hover:bg-emerald-50 group-hover:text-emerald-600 transition-colors">
+                <div className="p-1.5 rounded-[9px] bg-slate-100 text-slate-600 group-hover:bg-emerald-50 group-hover:text-emerald-600 transition-colors">
                   <CircleDollarSign className="w-4 h-4" />
                 </div>
                 <div>
@@ -149,7 +148,7 @@ const DropDownMenus = ({ setActive }: DropDownMenusProps) => {
               className="group flex items-center justify-between px-3 py-2.5 rounded-xl hover:bg-slate-50 text-slate-700 hover:text-primary transition-all duration-150"
             >
               <div className="flex items-center gap-2.5">
-                <div className="p-1.5 rounded-lg bg-slate-100 text-slate-600 group-hover:bg-sky-50 group-hover:text-sky-600 transition-colors">
+                <div className="p-1.5 rounded-[9px] bg-slate-100 text-slate-600 group-hover:bg-sky-50 group-hover:text-sky-600 transition-colors">
                   <Calendar className="w-4 h-4" />
                 </div>
                 <div>
@@ -170,7 +169,7 @@ const DropDownMenus = ({ setActive }: DropDownMenusProps) => {
           className="group w-full flex items-center justify-between px-3 py-2 rounded-xl text-rose-600 hover:bg-rose-50 transition-colors duration-150"
         >
           <div className="flex items-center gap-2.5">
-            <div className="p-1.5 rounded-lg bg-rose-100/60 text-rose-600 group-hover:bg-rose-200/60 transition-colors">
+            <div className="p-1.5 rounded-[9px] bg-rose-100/60 text-rose-600 group-hover:bg-rose-200/60 transition-colors">
               <LogOut className="w-4 h-4" />
             </div>
             <span className="text-sm font-semibold">Sign Out</span>

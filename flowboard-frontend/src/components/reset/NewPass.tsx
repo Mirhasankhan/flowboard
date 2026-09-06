@@ -72,7 +72,7 @@ const NewPass = () => {
         </p>
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className="rounded-lg pt-6 bg-white w-full"
+          className="rounded-[9px] pt-6 bg-white w-full"
         >
           <div className="mb-4 w-full">
             <label className="block pb-2 font-medium">New Password</label>

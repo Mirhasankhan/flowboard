@@ -86,14 +86,20 @@ const getBoardByIdFromDB = async (userId: string, boardId: string) => {
       title: true,
       description: true,
       columns: {
+        orderBy: { position: "asc" },
         select: {
           id: true,
           title: true,
           position: true,
           tasks: {
+            orderBy: { position: "asc" },
             select: {
+              id: true,
               title: true,
               position: true,
+              columnId: true,
+              createdAt: true,
+              updatedAt: true,
             },
           },
         },
