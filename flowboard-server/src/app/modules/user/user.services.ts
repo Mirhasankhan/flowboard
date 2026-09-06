@@ -5,6 +5,11 @@ import prisma from "../../../shared/prisma";
 import bcrypt from "bcryptjs";
 import { emailBody } from "../../../helpers/emailBody";
 import sendEmail from "../../../helpers/sendEmail";
+import { Request } from "express";
+import {
+  deleteFromCloudinary,
+  uploadInSpace,
+} from "../../../helpers/uploadInCloudinary";
 
 const createPendingUserIntoDB = async (payload: PendingUser) => {
   const existingUser = await prisma.user.findUnique({
@@ -86,7 +91,7 @@ const verifyEmailAndCreateUser = async (email: string, otp: string) => {
       data: {
         email,
         password,
-        fullName       
+        fullName,
       },
     });
 
@@ -108,8 +113,35 @@ const getMyProfileFromDB = async (userId: string) => {
   return user;
 };
 
+const updateMyProfileInDB = async (req: Request) => {
+  const file = req.file as Express.Multer.File | undefined;
+  const userId = req.user?.id;
+
+  const user = await prisma.user.findUniqueOrThrow({
+    where: { id: userId },
+  });
+
+  let profileImage;
+  if (file) {
+    profileImage = await uploadInSpace(file, "users/profileImage");
+  }
+
+  await prisma.user.update({
+    where: { id: userId },
+    data: {
+      fullName: req.body.fullName || user.fullName,
+      profileImage: profileImage || user.profileImage,
+    },
+  });
+
+  if (profileImage && user.profileImage) {
+    await deleteFromCloudinary(user.profileImage);
+  }
+};
+
 export const userService = {
   createPendingUserIntoDB,
   verifyEmailAndCreateUser,
   getMyProfileFromDB,
+  updateMyProfileInDB,
 };

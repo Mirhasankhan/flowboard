@@ -30,8 +30,6 @@ const TaskCard = ({
   const [isEditing, setIsEditing] = useState(false);
   const [editTitle, setEditTitle] = useState(task.title);
   const [isSaving, setIsSaving] = useState(false);
-  const [isHovered, setIsHovered] = useState(false);
-  const [dropPosition, setDropPosition] = useState<"top" | "bottom" | null>(null);
 
   const handleSave = async () => {
     const trimmed = editTitle.trim();
@@ -66,42 +64,31 @@ const TaskCard = ({
     const rect = e.currentTarget.getBoundingClientRect();
     const midY = rect.top + rect.height / 2;
     const isTop = e.clientY < midY;
-    setDropPosition(isTop ? "top" : "bottom");
     onTaskDragOver(isTop ? index : index + 1);
-  };
-
-  const handleDragLeave = () => {
-    setDropPosition(null);
   };
 
   const handleDrop = (e: React.DragEvent) => {
     if (!isEditable) return;
     e.preventDefault();
     e.stopPropagation();
-    const targetIdx = dropPosition === "bottom" ? index + 1 : index;
-    setDropPosition(null);
+    const rect = e.currentTarget.getBoundingClientRect();
+    const midY = rect.top + rect.height / 2;
+    const isTop = e.clientY < midY;
+    const targetIdx = isTop ? index : index + 1;
     onTaskDrop(targetIdx);
   };
 
   return (
     <div
-      className="relative transition-all duration-150"
       onDragOver={handleDragOver}
-      onDragLeave={handleDragLeave}
       onDrop={handleDrop}
     >
-      {/* Visual drop indicator above */}
-      {dropPosition === "top" && (
-        <div className="absolute -top-1.5 left-0 right-0 z-10 h-1 rounded-full bg-blue-500 shadow-sm" />
-      )}
-
       <div
         draggable={isEditable && !isEditing}
         onDragStart={(e) => onTaskDragStart(e, task.id, columnId, index)}
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
-        className={`group relative rounded-xl border border-zinc-200/80 bg-white p-3.5 shadow-sm transition-all duration-200 hover:border-zinc-300 hover:shadow dark:border-zinc-800 dark:bg-zinc-900 dark:hover:border-zinc-700 ${isEditable && !isEditing ? "cursor-grab active:cursor-grabbing" : ""
-          }`}
+        className={`group relative rounded-xl border border-zinc-200/80 bg-white p-3.5 dark:border-zinc-800 dark:bg-zinc-900 ${
+          isEditable && !isEditing ? "cursor-grab active:cursor-grabbing" : ""
+        }`}
       >
         {isEditing ? (
           <div className="space-y-2">
@@ -155,8 +142,8 @@ const TaskCard = ({
               </p>
             </div>
 
-            {isEditable && isHovered && (
-              <div className="flex shrink-0 items-center gap-1">
+            {isEditable && (
+              <div className="flex shrink-0 items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-150">
                 <button
                   type="button"
                   title="Edit task"
@@ -178,11 +165,6 @@ const TaskCard = ({
           </div>
         )}
       </div>
-
-      {/* Visual drop indicator below */}
-      {dropPosition === "bottom" && (
-        <div className="absolute -bottom-1.5 left-0 right-0 z-10 h-1 rounded-full bg-blue-500 shadow-sm" />
-      )}
     </div>
   );
 };

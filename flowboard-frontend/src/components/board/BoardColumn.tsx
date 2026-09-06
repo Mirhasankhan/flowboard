@@ -143,10 +143,11 @@ const BoardColumn = ({
     <div
       onDragOver={handleColumnDragOver}
       onDrop={handleColumnDrop}
-      className={`flex h-full max-h-[calc(100vh-210px)] w-80 shrink-0 flex-col rounded-2xl border transition-all duration-200 ${isDragOverColumn
-        ? "border-blue-500 bg-blue-50/40 ring-2 ring-blue-500/20 dark:border-blue-500 dark:bg-blue-950/20"
-        : "border-zinc-200/80 bg-zinc-50/80 dark:border-zinc-800 dark:bg-zinc-900/60"
-        }`}
+      className={`flex h-full min-h-[380px] max-h-[620px] w-full min-w-0 flex-col rounded-2xl border transition-all duration-200 ${
+        isDragOverColumn
+          ? "border-blue-500 bg-blue-50/40 ring-2 ring-blue-500/20 dark:border-blue-500 dark:bg-blue-950/20"
+          : "border-zinc-200/80 bg-zinc-50/80 dark:border-zinc-800 dark:bg-zinc-900/60"
+      }`}
     >
       {/* Column Header */}
       <div

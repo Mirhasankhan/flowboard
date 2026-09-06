@@ -69,68 +69,15 @@ const authApi = baseApi.injectEndpoints({
         },
       }),
     }),
-    changePassword: builder.mutation({
-      query: (newPassword) => ({
-        url: "/auth/reset-password",
-        method: "PATCH",
-        body: newPassword,
-      }),
-    }),
-    updateImage: builder.mutation({
-      query: (image) => ({
-        url: "/users/update/profileImage",
-        method: "PUT",
-        body: image,
-      }),
-      invalidatesTags: ["users"],
-    }),
+
     updateProfile: builder.mutation({
       query: (data) => ({
-        url: "/auth/update",
+        url: "/user/profile-update",
         method: "PUT",
         body: data,
       }),
       invalidatesTags: ["users"],
     }),
-    updateIntroVideo: builder.mutation({
-      query: (file) => ({
-        url: "/auth/upload/intro-video",
-        method: "PUT",
-        body: file,
-      }),
-      invalidatesTags: ["users"],
-    }),
-    updateprofileImage: builder.mutation({
-      query: (file) => ({
-        url: "/auth/upload/profileImage",
-        method: "PUT",
-        body: file,
-      }),
-      invalidatesTags: ["users"],
-    }),
-    allLawyers: builder.query({
-      query: ({ experience, type, specializationId }) => ({
-        url: `/user/all?experience=${experience}&type=${type}&specializationId=${specializationId}`,
-        method: "GET",
-      }),
-      providesTags: ["users"],
-    }),
-    lawyerDetails: builder.query({
-      query: (id) => ({
-        url: `/user/details/${id}`,
-        method: "GET",
-      }),
-      providesTags: ["users"],
-    }),
-
-    allUsers: builder.query({
-      query: ({ searchQuery, selectedRole, page, limit }) => ({
-        url: `/analysis/all-users?search=${searchQuery}&role=${selectedRole}&page=${page}&limit=${limit}`,
-        method: "GET",
-      }),
-      providesTags: ["users"],
-    }),
-    
   }),
 });
 
@@ -140,13 +87,7 @@ export const {
   useVerifyEmailMutation,
   useResendOtpMutation,
   useProfileQuery,
-  useUpdateImageMutation,
-  useUpdateprofileImageMutation,
-  useLawyerDetailsQuery,
-  useUpdateIntroVideoMutation,
-  useAllLawyersQuery,
   useLoginMutation,
-  useAllUsersQuery,
   useUpdateProfileMutation,
   useSocialLoginMutation,
   useVerifyOtpMutation,

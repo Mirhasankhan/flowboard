@@ -25,11 +25,9 @@ export default {
     email: process.env.EMAIL,
     app_pass: process.env.APP_PASS,
   },
-  bucket: {
-    name: process.env.BUCKET_NAME,
-    region: process.env.BUCKET_REGION,
-    access_key: process.env.BUCKET_ACCESS_KEY,
-    secret_key: process.env.BUCKET_SECRET_KEY,
-    endpoint: process.env.BUCKET_ENDPOINT,
+  CLOUDINARY: {
+    cloudName: process.env.CLOUDNAME,
+    apiKey: process.env.API_KEY,
+    apiSecret: process.env.API_SECRET,
   },
 };

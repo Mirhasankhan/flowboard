@@ -31,8 +31,19 @@ const myProfile = catchAsync(async (req, res) => {
   });
 });
 
+const updateMyProfile = catchAsync(async (req, res) => {
+  await userService.updateMyProfileInDB(req);
+
+  sendResponse(res, {
+    success: true,
+    statusCode: 200,
+    message: "Profile updated successfully.",
+  });
+});
+
 export const UserControllers = {
   createPendingUser,
   verifyEmailAndCreateUser,
   myProfile,
+  updateMyProfile,
 };

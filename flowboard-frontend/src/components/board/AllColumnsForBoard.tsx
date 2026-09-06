@@ -331,8 +331,72 @@ const AllColumnsForBoard = ({ board }: AllColumnsForBoardProps) => {
 
   return (
     <div className="relative mt-6">
-      {/* Horizontal scrolling canvas */}
-      <div className="flex items-start gap-5 overflow-x-auto pb-6 scrollbar-thin scrollbar-thumb-zinc-300 dark:scrollbar-thumb-zinc-700 min-h-[calc(100vh-200px)]">
+      {/* Top Header: Title on one side, Add Column button on the other side */}
+      <div className="mb-5 flex flex-wrap items-center justify-between gap-4">
+        <div className="flex items-center gap-3">
+          <h2 className="text-xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100">
+            Columns
+          </h2>
+          <span className="inline-flex items-center justify-center rounded-full bg-zinc-100 px-2.5 py-0.5 text-xs font-semibold text-zinc-600 dark:bg-zinc-800 dark:text-zinc-300">
+            {columns.length}
+          </span>
+        </div>
+
+        {isEditable && (
+          <div>
+            {isAddingColumn ? (
+              <form onSubmit={handleCreateColumn} className="flex items-center gap-2">
+                <input
+                  type="text"
+                  autoFocus
+                  value={newColumnTitle}
+                  onChange={(e) => setNewColumnTitle(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Escape") {
+                      setIsAddingColumn(false);
+                      setNewColumnTitle("");
+                    }
+                  }}
+                  disabled={isCreatingColumn}
+                  placeholder="Column title..."
+                  className="rounded-[9px] border border-blue-500 bg-white px-3 py-1.5 text-sm text-zinc-900 shadow-sm focus:outline-none dark:bg-zinc-900 dark:text-zinc-100"
+                />
+                <button
+                  type="submit"
+                  disabled={isCreatingColumn || !newColumnTitle.trim()}
+                  className="inline-flex items-center gap-1.5 rounded-[9px] bg-blue-600 px-3.5 py-1.5 text-xs font-semibold text-white transition hover:bg-blue-700 disabled:opacity-50"
+                >
+                  {isCreatingColumn && <Loader2 className="h-3 w-3 animate-spin" />}
+                  Add
+                </button>
+                <button
+                  type="button"
+                  disabled={isCreatingColumn}
+                  onClick={() => {
+                    setIsAddingColumn(false);
+                    setNewColumnTitle("");
+                  }}
+                  className="rounded-[9px] p-1.5 text-zinc-500 hover:bg-zinc-100 hover:text-zinc-700 dark:hover:bg-zinc-800 dark:hover:text-zinc-300"
+                >
+                  <X className="h-4 w-4" />
+                </button>
+              </form>
+            ) : (
+              <button
+                type="button"
+                onClick={() => setIsAddingColumn(true)}
+                className="inline-flex items-center gap-1.5 rounded-[9px] bg-blue-600 px-3.5 py-2 text-xs font-semibold text-white shadow-sm transition hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-700"
+              >
+                <Plus className="h-4 w-4" />
+                Add Column
+              </button>
+            )}
+          </div>
+        )}
+      </div>
+
+      {/* 3-column responsive grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 items-start pb-6">
         {columns.map((col, idx) => (
           <BoardColumn
             key={col.id}
@@ -350,64 +414,6 @@ const AllColumnsForBoard = ({ board }: AllColumnsForBoardProps) => {
             onTaskDropOnColumn={handleTaskDropOnColumn}
           />
         ))}
-
-        {/* Add New Column Button / Composer */}
-        {isEditable && (
-          <div className="w-80 shrink-0">
-            {isAddingColumn ? (
-              <form
-                onSubmit={handleCreateColumn}
-                className="rounded-2xl border border-blue-500 bg-white p-3.5 shadow-sm dark:border-blue-500 dark:bg-zinc-900"
-              >
-                <input
-                  type="text"
-                  autoFocus
-                  value={newColumnTitle}
-                  onChange={(e) => setNewColumnTitle(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === "Escape") {
-                      setIsAddingColumn(false);
-                      setNewColumnTitle("");
-                    }
-                  }}
-                  disabled={isCreatingColumn}
-                  placeholder="Enter column title..."
-                  className="w-full rounded-xl border border-zinc-200 bg-zinc-50 p-2.5 text-sm text-zinc-900 focus:border-blue-500 focus:bg-white focus:outline-none dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-100"
-                />
-                <div className="mt-3 flex items-center gap-2">
-                  <button
-                    type="submit"
-                    disabled={isCreatingColumn || !newColumnTitle.trim()}
-                    className="inline-flex items-center gap-1.5 rounded-[9px] bg-blue-600 px-3.5 py-1.5 text-xs font-semibold text-white transition hover:bg-blue-700 disabled:opacity-50"
-                  >
-                    {isCreatingColumn && <Loader2 className="h-3 w-3 animate-spin" />}
-                    Add Column
-                  </button>
-                  <button
-                    type="button"
-                    disabled={isCreatingColumn}
-                    onClick={() => {
-                      setIsAddingColumn(false);
-                      setNewColumnTitle("");
-                    }}
-                    className="rounded-[9px] p-1.5 text-zinc-500 hover:bg-zinc-100 hover:text-zinc-700 dark:hover:bg-zinc-800 dark:hover:text-zinc-300"
-                  >
-                    <X className="h-4 w-4" />
-                  </button>
-                </div>
-              </form>
-            ) : (
-              <button
-                type="button"
-                onClick={() => setIsAddingColumn(true)}
-                className="flex w-full items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-zinc-300/80 bg-zinc-50/50 p-4 text-sm font-semibold text-zinc-600 transition hover:border-blue-500 hover:bg-blue-50/30 hover:text-blue-600 dark:border-zinc-800 dark:bg-zinc-900/30 dark:text-zinc-400 dark:hover:border-blue-500 dark:hover:text-blue-400"
-              >
-                <Plus className="h-4 w-4" />
-                Add Column
-              </button>
-            )}
-          </div>
-        )}
       </div>
 
       {/* Delete Confirmation Modal */}
